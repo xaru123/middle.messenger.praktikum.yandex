@@ -1,0 +1,26 @@
+@import '../../style/globalVariableStyle.scss';
+
+.layout-char {
+  flex: 1;
+}
+
+.layout-char__item {
+  flex: 1;
+  height: calc(100vh - 40px);
+  margin: $margin-top $margin-right $margin-bottom 10px;
+  box-sizing: border-box;
+  justify-content: space-between;
+  display: flex;
+  width: 20%;
+}
+
+.layout-char__item-chat {
+  margin-right: $margin-right;
+  flex: 2.2;
+}
+
+@media (max-device-width: 768px) {
+  .layout-char__item {
+    height: calc(100vh - 130px);
+  }
+}

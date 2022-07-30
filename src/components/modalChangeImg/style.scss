@@ -1,0 +1,8 @@
+@import '../../style/globalVariableStyle.scss';
+
+.modal-change-img * {
+  padding: 10px;
+}
+.modal-change-img__error {
+  color: $color-danger;
+}

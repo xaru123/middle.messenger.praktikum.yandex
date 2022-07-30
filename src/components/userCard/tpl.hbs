@@ -1,0 +1,21 @@
+<div class="content content_position-center w-100 flex_align-items_center">
+    <div class="logic-block profile flex flex_direction_column flex_justify-content_space-between flex_align-items_center">
+        <h1 class="logic-block__header">{{headerTitle}}</h1>
+            {{> avatar src='' classAvatar="avatar_big avatar_can-change profile__avatar" id="avatar"}}
+        <div class="profile__info flex flex_direction_column flex_justify-content_space-between ">
+            {{#each order as |orderItem IdOrder|}}
+                <div class="profile__info-row">
+                    <div class="profile__info-item profile__info-left"> {{orderItem.name}}             </div>
+                    {{#with (lookup ../userInfo [field])~}}
+                        <div class="profile__info-item profile__info-right"> {{this}} </div>
+                    {{/with}}
+                </div>
+            {{/each}}
+        </div>
+        <div class="profile__links flex flex_direction_row flex_justify-content_space-between w-100">
+            {{#each listA as |itemA idA|}}
+                {{> link text=itemA.text href=itemA.href }}
+            {{/each}}
+        </div>
+    </div>
+</div>
