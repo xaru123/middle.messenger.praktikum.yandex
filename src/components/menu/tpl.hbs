@@ -1,0 +1,12 @@
+<div class="menu flex flex_direction_column flex_justify-content_space-between">
+    {{> avatar classAvatar = "menu__item menu__item-avatar"}}
+    <a href="/chats" target="_self" class="menu__item menu__item-msg menu__item_center">
+        {{> icon id="chat" classIcon="icon__msg" }}
+    </a>
+    <a href="/settings/profile" target="_self" class="menu__item menu__item-setting">
+        {{> icon id="settings" classIcon="icon__settings" }}
+    </a>
+    <a href="/auth/sign-in" target="_self" class="menu__item menu__item-exit">
+        {{> icon id="logout" classIcon="icon__exit" }}
+    </a>
+</div>
