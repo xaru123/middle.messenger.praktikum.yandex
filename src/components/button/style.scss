@@ -1,0 +1,23 @@
+@import '../../style/globalVariableStyle.scss';
+
+.button {
+  width: 100%;
+  padding: $padding-bottom $padding-left*5;
+  background-color: $color-main;
+  color: $color-light;
+  border-radius: $radius-small;
+  border-color: transparent;
+
+  &:hover {
+    background-color: $color-main-dark;
+  }
+}
+
+.button.button_small {
+  max-width: 160px;
+  background-color: $color-minor;
+
+  &:hover {
+    background-color: $color-minor-light;
+  }
+}
