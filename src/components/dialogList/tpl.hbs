@@ -1,0 +1,15 @@
+<div class="dialogs-block flex flex_direction_column flex_justify-content_center w-100">
+    <div class="dialogs-block__item dialogs-block__item-search-form">
+        {{>search-block}}
+    </div>
+    <div class="dialog-list logic-block flex flex_direction_column flex_justify-content_start">
+        {{#each listR as |itemdialog iddialog|}}
+            <div class="dialog-list__row">
+                {{> dialog-item props=itemdialog}}
+            </div>
+        {{/each}}
+    </div>
+</div>
+
+
+

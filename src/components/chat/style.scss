@@ -1,0 +1,160 @@
+@import '../../style/globalVariableStyle.scss';
+
+.chat-block {
+  flex: 1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  justify-content: center;
+}
+
+.chat-block__content {
+  min-height: 0;
+  display: none;
+}
+
+.chat-block__content-not-selected-chat {
+  display: flex;
+}
+
+.chat-block.show .chat-block__content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.chat-block.show .chat-block__content-not-selected-chat {
+  display: none;
+}
+
+.chat-block__content-item {
+  padding: $padding-bottom 0 $padding-bottom;
+}
+
+.chat-block__header {
+  border-bottom: 1px solid $color-dark;
+  margin-bottom: auto;
+}
+
+.chat-block__main {
+  padding: $padding-left *2;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.chat-block__footer {
+
+  margin-top: auto;
+  padding: 0;
+
+  i {
+    padding: 0;
+    align-self: center;
+  }
+}
+
+.chat-row {
+  flex: 1;
+  margin: $padding-left 0;
+  width: 50%;
+}
+
+.msg {
+  background: $color-main;
+  border-radius: $radius-big;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 20px;
+  min-width: 1px;
+  word-break: break-word;
+  position: relative;
+}
+
+.msg__time {
+  position: absolute;
+  color: $color-gray;
+  bottom: -1rem;
+  font-weight: 300;
+  font-size: 9px;
+  line-height: 13px;
+  text-align: right;
+  letter-spacing: 0.05em;
+}
+
+.chat-row-from {
+  align-self: start;
+  justify-content: start;
+
+  .msg {
+    background: $color-gray-very-light;
+    justify-items: flex-start;
+  }
+
+  .msg__time {
+    left: -10px;
+  }
+}
+
+.chat-row-to {
+  align-self: end;
+  justify-content: end;
+
+  .msg {
+    background: $color-main;
+    align-items: self-end;
+  }
+
+  .msg__time {
+    right: -10px;
+  }
+}
+
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.dropdown-btn {
+  position: relative;
+  display: inline-block;
+
+}
+
+.dropdown-content {
+  position: absolute;
+  display: none;
+  margin: 0;
+  padding: $padding-left;
+  animation: fadeIn .3s ease;
+  -webkit-animation: fadeIn .3s ease;
+  z-index: 3;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+
+  > li {
+    clear: both;
+    list-style: none;
+    display: block;
+    text-decoration: none;
+    padding: $padding-left;
+
+    &:hover {
+      background: $color-gray-very-light;
+    }
+  }
+}
+
+.dropdown-content.clicked {
+  display: flex;
+  right: 70px;
+  top: 120px;
+  animation: fadeIn .3s ease;
+  -webkit-animation: fadeIn .3s ease;
+}
