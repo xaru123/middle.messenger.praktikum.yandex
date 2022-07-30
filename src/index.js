@@ -1,6 +1,5 @@
 import tpl from './index.hbs';
 import './styles.scss';
-
 import signIn from './pages/auth/signIn';
 import signUp from './pages/auth/signUp';
 import chats from './pages/chats/chats';
