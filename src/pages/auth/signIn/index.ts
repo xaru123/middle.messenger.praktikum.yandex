@@ -1,7 +1,7 @@
 import { tpl } from './tpl.hbs';
 import Block from '../../../services/block';
 import LayoutAuth from '../../../layouts/auth';
-import FormSignIn from '../../../forms/SignIn';
+import FormSignIn from '../../../forms/signIn';
 import Link from '../../../components/link';
 
 const formContent = new FormSignIn();
