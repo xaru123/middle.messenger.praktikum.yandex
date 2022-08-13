@@ -1,63 +1,60 @@
 @import '../../style/globalVariableStyle.scss';
-
+@import '../../style/mixin.scss';
 .chat-block {
   flex: 1;
   padding-top: 10px;
   padding-bottom: 10px;
   justify-content: center;
 }
-
 .chat-block__content {
   min-height: 0;
   display: none;
+  flex-direction: column;
 }
-
 .chat-block__content-not-selected-chat {
   display: flex;
 }
-
 .chat-block.show .chat-block__content {
   display: flex;
   flex: 1;
   min-height: 0;
 }
-
 .chat-block.show .chat-block__content-not-selected-chat {
   display: none;
 }
-
 .chat-block__content-item {
   padding: $padding-bottom 0 $padding-bottom;
+  display: flex;
 }
-
 .chat-block__header {
   border-bottom: 1px solid $color-dark;
   margin-bottom: auto;
+  @include flex-constructor(row, space-between, null);
 }
-
 .chat-block__main {
   padding: $padding-left *2;
   overflow: hidden;
   overflow-y: auto;
+  @include flex-constructor(column, null, null);
 }
-
 .chat-block__footer {
-
   margin-top: auto;
   padding: 0;
+  @include flex-constructor(row, space-between, null);
 
   i {
     padding: 0;
     align-self: center;
   }
+  .input-group {
+    width: 100%;
+  }
 }
-
 .chat-row {
   flex: 1;
   margin: $padding-left 0;
   width: 50%;
 }
-
 .msg {
   background: $color-main;
   border-radius: $radius-big;
@@ -68,7 +65,6 @@
   word-break: break-word;
   position: relative;
 }
-
 .msg__time {
   position: absolute;
   color: $color-gray;
@@ -79,7 +75,6 @@
   text-align: right;
   letter-spacing: 0.05em;
 }
-
 .chat-row-from {
   align-self: start;
   justify-content: start;
@@ -93,7 +88,6 @@
     left: -10px;
   }
 }
-
 .chat-row-to {
   align-self: end;
   justify-content: end;
@@ -107,8 +101,6 @@
     right: -10px;
   }
 }
-
-
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -117,13 +109,10 @@
     opacity: 1;
   }
 }
-
 .dropdown-btn {
   position: relative;
   display: inline-block;
-
 }
-
 .dropdown-content {
   position: absolute;
   display: none;
@@ -132,21 +121,20 @@
   animation: fadeIn .3s ease;
   -webkit-animation: fadeIn .3s ease;
   z-index: 3;
-}
+  .ul {
+    margin: 0;
+    padding: 0;
 
-ul {
-  margin: 0;
-  padding: 0;
+    > li {
+      clear: both;
+      list-style: none;
+      display: block;
+      text-decoration: none;
+      padding: $padding-left;
 
-  > li {
-    clear: both;
-    list-style: none;
-    display: block;
-    text-decoration: none;
-    padding: $padding-left;
-
-    &:hover {
-      background: $color-gray-very-light;
+      &:hover {
+        background: $color-gray-very-light;
+      }
     }
   }
 }

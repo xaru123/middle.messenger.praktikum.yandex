@@ -1,0 +1,40 @@
+@import './normalize.css';
+@import './globalVariableStyle.scss';
+@import './flexbox.scss';
+@import './scroll.scss';
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Mulish:wght@200;400&family=Raleway:wght@100;300&display=swap');
+
+* {
+  font-family: 'Mulish', sans-serif;
+  font-size: $font-size;
+  font-weight: 500;
+  text-decoration: none;
+}
+html, body {
+  background: $color-body;
+  color: $color-dark;
+}
+.content {
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+  overflow: hidden;
+}
+.content_position-center {
+  justify-content: center;
+}
+.logic-block {
+  display: flex;
+  box-shadow: $shadow;
+  border-radius: $radius-big;
+  background: $color-light;
+  padding: $padding-top * 2 $padding-left*3 $padding-bottom*3;
+}
+.logic-block__header {
+  font-size: $font-size * 2;
+  line-height: $font-size * 2;
+  font-weight: bold;
+  text-align: center;
+}
+

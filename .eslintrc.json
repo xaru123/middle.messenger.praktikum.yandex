@@ -1,0 +1,27 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "es6": true
+  },
+  "extends": [
+    "google",
+    "prettier",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-plugin-prettier",
+    "prettier"
+  ],
+  "rules": {
+    "require-jsdoc": 0,
+    "prefer-promise-reject-errors": "error",
+    "no-invalid-this": "error"
+  }
+}

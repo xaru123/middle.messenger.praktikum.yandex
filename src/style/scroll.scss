@@ -1,0 +1,23 @@
+@import './globalVariableStyle.scss';
+%scroll-options {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333;
+}
+
+*::-webkit-scrollbar,
+html *::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+*::-webkit-scrollbar-track,
+html *::-webkit-scrollbar-track {
+  background: $color-gray-very-light;
+  border-radius: $radius-big;
+}
+*::-webkit-scrollbar-thumb,
+html *::-webkit-scrollbar-thumb {
+  background-color: $color-gray-light;
+  border-radius: $radius-big;
+  border: 3px solid $color-light;
+}

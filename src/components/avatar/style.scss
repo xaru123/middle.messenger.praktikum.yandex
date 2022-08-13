@@ -1,5 +1,4 @@
 @import '../../style/globalVariableStyle.scss';
-
 .avatar {
   background: $color-gray-very-light;
   width: 50px;
@@ -8,12 +7,10 @@
   border-radius: 50%;
   color: $color-gray-light;
 }
-
 .avatar_big {
   width: 100px;
   height: 100px;
 }
-
 .avatar_can-change:hover {
   background: $color-gray-light;
   opacity: 0.5;

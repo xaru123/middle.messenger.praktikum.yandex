@@ -1,0 +1,21 @@
+@import './flexbox.scss';
+
+@mixin content-constructor($withImg, $position, $direction) {
+  @include flex-constructor(row, 'flex-start', center);
+  height: 100%;
+  overflow: hidden;
+  @if ($withImg == 'true') {
+    background: $logo;
+    background-repeat: no-repeat;
+    background-origin: border-box;
+    background-size: cover;
+    @if ($position == 'center-left') {
+      background-position: -5vw -5vh;
+    } @else {
+      background-position: 50vw 35vh;
+    }
+  }
+  @if ($direction == 'center') {
+    justify-content: center;
+  }
+}

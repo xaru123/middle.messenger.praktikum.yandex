@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-standard-scss"
+  ],
+  "rules": {
+    "string-quotes": "single",
+    "block-opening-brace-newline-after": "always-multi-line",
+    "comment-empty-line-before": "never",
+    "property-no-vendor-prefix": null,
+    "no-missing-end-of-source-newline": null,
+    "no-empty-first-line": null,
+    "rule-empty-line-before": null,
+    "scss/at-rule-no-unknown": null,
+    "function-max-empty-lines": 0,
+    "block-no-empty": null,
+    "at-rule-no-unknown": null
+  },
+  "ignoreFiles": [
+    "build/*",
+    "node_modules/*",
+    "dist/*"
+  ]
+}

@@ -1,37 +1,38 @@
 @import '../../style/globalVariableStyle.scss';
-
+@import '../../style/mixin.scss';
+.user-card {
+  width: 100%;
+  @include flex-constructor(column, space-between, center);
+}
 .profile {
   box-sizing: border-box;
+  @include flex-constructor(column, space-between, center);
 }
-
 .profile__avatar {
   margin: 50px;
 }
-
 .profile__info {
   padding: $padding-left 0px;
+  @include flex-constructor(column, space-between, null);
 }
-
 .profile__links {
   margin-top: $margin-left;
+  width: 100%;
+  @include flex-constructor(row, space-between, null);
 }
-
 .profile__info-row {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
   justify-content: space-between;
 }
-
 .profile__info-item {
   padding: 15px 75px;
 }
-
 .profile__info-left {
   padding-left: 0;
   font-weight: bold;
 }
-
 .profile__info-right {
   padding-right: 0;
   color: $color-gray-light;

@@ -1,12 +1,17 @@
 @import '../../style/globalVariableStyle.scss';
-
+@import '../../style/mixin.scss';
+.dialogs-block {
+  @include flex-constructor(column, center, null);
+  width: 100%;
+  flex-wrap: nowrap;
+}
 .dialogs-block__item-search-form {
   margin: 0 0 10px;
 }
-
 .dialog-list {
   align-items: stretch;
   flex: 1;
+  @include flex-constructor(column, start, stretch);
 
   .dialog-list__row {
     border-bottom: 1px solid black;

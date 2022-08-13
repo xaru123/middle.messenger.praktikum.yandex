@@ -1,0 +1,22 @@
+@import '../../style/globalVariableStyle.scss';
+@import '../../style/mixin.scss';
+.layout-main {
+  width: 100%;
+  @include flex-constructor(row, space-between, center);
+}
+.content-form-profile {
+  width: 100%;
+  @include flex-constructor(column, center, center);
+
+  .logic-block.settings {
+    @include flex-constructor(column, space-between, center);
+  }
+}
+
+@media (max-device-width: 768px) {
+  .layout-main {
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+  }
+}

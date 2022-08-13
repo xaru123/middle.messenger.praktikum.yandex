@@ -1,0 +1,11 @@
+@import '../../style/globalVariableStyle.scss';
+@import '../../style/mixin.scss';
+.modal-change-img {
+  @include flex-constructor(column, null, center);
+}
+.modal-change-img * {
+  padding: 10px;
+}
+.modal-change-img__error {
+  color: $color-danger;
+}

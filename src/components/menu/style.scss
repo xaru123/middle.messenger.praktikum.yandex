@@ -1,4 +1,5 @@
 @import '../../style/globalVariableStyle.scss';
+@import '../../style/mixin.scss';
 
 .menu {
   background: $color-main;
@@ -7,23 +8,20 @@
   margin: $margin-top 10px $margin-right $margin-bottom;
   box-sizing: border-box;
   padding: 15px 15px;
+  @include flex-constructor(column, space-between, center);
 }
-
 .menu__item {
   flex: 1;
   display: inline-grid;
   margin: auto auto;
 }
-
 .menu__item_center {
   align-items: center;
   flex-grow: 20;
 }
-
 .menu__item:hover {
   cursor: auto;
 }
-
 @media (max-device-width: 768px) {
   .menu {
     width: calc(100vw - 40px);

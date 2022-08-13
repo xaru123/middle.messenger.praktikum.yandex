@@ -1,0 +1,38 @@
+@import '../../style/globalVariableStyle.scss';
+@import '../../style/mixin.scss';
+@import '../../style/flexbox.scss';
+.layout-server {
+  @include content-constructor('true', 'center-left', 'null');
+}
+.server-error {
+  position: absolute;
+  width: auto;
+  height: auto;
+  top: 20%;
+  right: 5%;
+  @include flex-constructor(column, center, center);
+}
+.server-error__item {
+  text-align: center;
+  color: $color-dark;
+}
+.server-error__code {
+  font-size: $font-size * 10;
+  line-height: $font-size * 10;
+}
+.server-error__text {
+  font-size: $font-size * 3;
+  line-height: $font-size * 3;
+}
+@media (max-device-width: 630px) {
+  .server-error {
+    top: 70%;
+    right: 60%;
+  }
+}
+@media (min-device-width: 630px) and (max-device-width: 1050px) {
+  .server-error__text {
+    font-size: $font-size * 1.5;
+    line-height: $font-size * 1.5;
+  }
+}
