@@ -6,7 +6,7 @@ import SignIn from './pages/auth/signIn';
 import SignUp from './pages/auth/signUp';
 import Error400 from './pages/server/400';
 import Error500 from './pages/server/500';
-import Profile from './pages/settings/Profile';
+import Profile from './pages/settings/profile';
 import ChangeProfile from './pages/settings/changeProfile';
 import ChangePassword from './pages/settings/changePassword';
 import Chats from './pages/chats/chats';
