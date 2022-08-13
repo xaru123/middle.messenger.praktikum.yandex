@@ -1,0 +1,88 @@
+@import './style/normalize.css';
+@import './style/globalVariableStyle.scss';
+@import './style/flexbox.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Mulish:wght@200;400&family=Raleway:wght@100;300&display=swap');
+
+* {
+  font-family: 'Mulish', sans-serif;
+  font-size: $font-size;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+html, body {
+  background: $color-body;
+  color: $color-dark;
+  scrollbar-width: thin;
+  scrollbar-color: $color-gray-very-light $color-gray-light;
+}
+
+
+*::-webkit-scrollbar,
+html *::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+*::-webkit-scrollbar-track,
+html *::-webkit-scrollbar-track {
+  background: $color-gray-very-light;
+  border-radius: $radius-big;
+}
+*::-webkit-scrollbar-thumb,
+html *::-webkit-scrollbar-thumb {
+  background-color: $color-gray-light;
+  border-radius: $radius-big;
+  border: 3px solid $color-light;
+}
+
+.body__background-img {
+  background: $logo;
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  background-size: cover;
+}
+
+.body__background-img_direction-bottom {
+  background-position: 50vw 35vh;
+}
+
+.body__background-img_direction-center-left {
+  background-position: -5vw -5vh;
+}
+
+.content {
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+}
+
+.content_position-center {
+  justify-content: center;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.logic-block {
+  display: flex;
+  box-shadow: $shadow;
+  border-radius: $radius-big;
+  background: $color-light;
+  padding: $padding-top * 2 $padding-left*3 $padding-bottom*3;
+}
+
+.logic-block__header {
+  font-size: $font-size * 2;
+  line-height: $font-size * 2;
+  font-weight: bold;
+  text-align: center;
+}
+
+@media (max-device-width: 630px) {
+  .body__background-img_direction-bottom {
+    background-position: 20vw 50vh;
+  }
+}
