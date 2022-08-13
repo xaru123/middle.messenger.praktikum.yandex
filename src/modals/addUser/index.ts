@@ -16,7 +16,7 @@ const button = new Button({
   value: 'Добавить',
 });
 
-export default class modalAddUser extends Block {
+export default class ModalAddUser extends Block {
   constructor(props: object) {
     const newProps = {
       input,

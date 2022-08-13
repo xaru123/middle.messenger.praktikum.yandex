@@ -76,7 +76,7 @@ const formContent = new Form({
   listBlockBtn: [btnBack, btnSubmit],
 });
 
-export default class ChangeProfile extends Block {
+export default class FormChangeProfile extends Block {
   constructor(props) {
     const newProps = {
       formContent,

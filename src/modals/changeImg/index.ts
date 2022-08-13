@@ -17,7 +17,7 @@ const button = new Button({
   value: 'Поменять',
 });
 
-export default class modalChangeImg extends Block {
+export default class ModalChangeImg extends Block {
   constructor(props: object) {
     const newProps = {
       link,

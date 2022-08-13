@@ -18,7 +18,7 @@ const formContent = new Form({
   listBlockInputs: [inputMsg],
 });
 
-export default class sendMsg extends Block {
+export default class SendMsg extends Block {
   constructor() {
     super('div', {
       formContent,

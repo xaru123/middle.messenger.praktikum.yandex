@@ -8,7 +8,7 @@ const layout = new LayoutMain({
   layoutContent: content,
 });
 
-export default class changePassword extends Block {
+export default class ChangePassword extends Block {
   constructor() {
     const newProps = {
       layout,

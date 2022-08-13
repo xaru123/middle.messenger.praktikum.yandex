@@ -15,7 +15,7 @@ const button = new Button({
   value: 'Удалить',
 });
 
-export default class modalDelUser extends Block {
+export default class ModalDelUser extends Block {
   constructor(props: object) {
     const newProps = {
       input,

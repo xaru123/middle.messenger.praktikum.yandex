@@ -53,7 +53,7 @@ const formContent = new Form({
   listBlockBtn: [btnBack, btnSubmit],
 });
 
-export default class ChangePassword extends Block {
+export default class FormChangePassword extends Block {
   constructor(props) {
     const newProps = {
       formContent,
