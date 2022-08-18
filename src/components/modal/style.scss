@@ -1,5 +1,8 @@
 @import '../../style/globalVariableStyle.scss';
-
+@import '../../style/mixin.scss';
+.modal-hidden {
+  display: none;
+}
 .modal__overlay, .modal__wrapper {
   position: fixed;
   top: 0;
@@ -8,7 +11,6 @@
   height: 100%;
   overflow: hidden;
 }
-
 .modal__overlay {
   z-index: 100;
   background-color: $color-gray;
@@ -20,19 +22,18 @@
     opacity: 0;
   }
 }
-
 .modal__wrapper {
   z-index: 101;
+  @include flex-constructor(column, center, center);
 }
-
 .modal__content {
   position: relative;
   width: 340px;
   background: $color-light;
   border-radius: $radius-big;
   z-index: 102;
+  @include flex-constructor(column, space-between, center);
 }
-
 #modal__btn-close {
   position: absolute;
   top: 15px;
@@ -41,6 +42,7 @@
   line-height: $font-size*2;
   text-decoration: none;
   color: $color-minor-light;
+
   &:hover {
     color: $color-main-dark;
   }

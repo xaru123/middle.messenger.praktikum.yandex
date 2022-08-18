@@ -1,9 +1,7 @@
 @import '../../style/globalVariableStyle.scss';
-
 .search {
   position: relative;
 }
-
 .search__icon {
   width: 20px;
   height: 20px;
@@ -15,8 +13,6 @@
 
   &:hover {
     cursor: pointer;
-    color:$color-gray-light;
+    color: $color-gray-light;
   }
 }
-
-

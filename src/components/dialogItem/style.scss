@@ -1,15 +1,16 @@
 @import '../../style/globalVariableStyle.scss';
-
+@import '../../style/mixin.scss';
+.dialog-item {
+  @include flex-constructor(row, start, null);
+}
 .dialog-item__user-name {
   font-weight: bold;
   padding: 5px;
 }
-
 .dialog-item__msg,
 .dialog-item__user-time {
   color: $color-gray;
 }
-
 .dialog-item__msg {
   width: 100%;
   margin: 0;
@@ -18,21 +19,20 @@
   padding: 5px;
   text-overflow: ellipsis;
 }
-
 .dialog-item__group_big {
+  @include flex-constructor(column, center, null);
+  flex-wrap: wrap;
   min-width: 0;
 }
-
 .dialog-item__group_end {
+  @include flex-constructor(column, space-between, null);
   margin-left: auto;
   position: relative;
 }
-
 .dialog-item__group_bottom {
   min-width: 0;
   width: 100%;
 }
-
 .dialog-item__marker {
   width: 10px;
   height: 10px;

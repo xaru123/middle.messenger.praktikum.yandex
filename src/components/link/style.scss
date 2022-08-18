@@ -1,11 +1,10 @@
 @import '../../style/globalVariableStyle.scss';
-
 a.link {
   color: $color-minor;
   text-decoration: none;
   margin-top: $margin-top*0.5;
-}
 
-a.link:hover {
-  color: $color-minor-light;
+  &:hover {
+    color: $color-minor-light;
+  }
 }

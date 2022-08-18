@@ -1,5 +1,4 @@
 @import '../../style/globalVariableStyle.scss';
-
 .button {
   width: 100%;
   padding: $padding-bottom $padding-left*5;
@@ -11,8 +10,15 @@
   &:hover {
     background-color: $color-main-dark;
   }
-}
 
+  &:focus-visible {
+    border-color: transparent;
+  }
+
+  &:disabled {
+    background: desaturate($color-main, 20%);
+  }
+}
 .button.button_small {
   max-width: 160px;
   background-color: $color-minor;

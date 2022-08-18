@@ -1,0 +1,9 @@
+@import '../../style/globalVariableStyle.scss';
+@import '../../style/mixin.scss';
+.layout-auth {
+  @include content-constructor('true', 'bottom', 'center');
+}
+.layout-auth__content {
+  @include flex-constructor(column, space-between, center);
+  flex: 0 1 0;
+}
