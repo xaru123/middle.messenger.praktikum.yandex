@@ -2,11 +2,15 @@ import EventBus from './eventBus';
 import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
 
-interface typicalObject {
+export interface IBlockPropEvent {
+  [eventName: string]: EventListener;
+}
+
+interface IObject {
   [index: string]: any;
 }
 
-export default class Block extends EventBus {
+export default class Block<TBlockProps extends {}> extends EventBus {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -32,20 +36,21 @@ export default class Block extends EventBus {
   public _setUpdate: Boolean = false;
   readonly _id: string;
   readonly _meta: { tagName: string; allProps: object };
-  readonly _children: Record<string, Block>;
-  protected props: typicalObject;
-  protected events: typicalObject;
-  protected _element: HTMLElement | null;
+  readonly children: Record<string, Block<TBlockProps>>;
+  public props: TBlockProps;
+  protected events: IBlockPropEvent | [];
+  public _element: HTMLElement | null;
 
-  constructor(tagName: string = 'div', allPropsAndChildren: typicalObject) {
+  constructor(tagName: string = 'div', allPropsAndChildren: TBlockProps) {
     super();
 
     this._id = makeUUID();
-    const { _children, allProps } = this._getIdealPropsAndChildren(allPropsAndChildren);
+    const { children, allProps } = this._getIdealPropsAndChildren(allPropsAndChildren);
     this._meta = { tagName, allProps };
-    this._children = _children;
+    this.children = children;
     this.events = allProps.events;
-    this.props = this._makePropsProxy({ ...allProps.attrs, __id: this._id });
+    const newProps = { ...allProps.attrs, __id: this._id } as unknown as TBlockProps;
+    this.props = this._makePropsProxy(newProps);
 
     this._registerEvents();
     this.emit(Block.EVENTS.INIT);
@@ -62,24 +67,29 @@ export default class Block extends EventBus {
 
   public dispatchComponentDidMount(): void {
     this.emit(Block.EVENTS.FLOW_CDM);
-    if (Object.keys(this._children).length) {
+    if (Object.keys(this.children).length) {
       this.emit(Block.EVENTS.FLOW_RENDER);
     }
   }
-
-  public setProps(nextProps: typicalObject): void {
+  public setProps(nextProps: TBlockProps | IObject): void {
     if (!nextProps) {
       return;
     }
     this._setUpdate = false;
     const oldValue = { ...this.props };
-    const { _children, allProps } = this._getIdealPropsAndChildren(nextProps);
-    if (Object.values(_children).length) {
-      Object.assign(this._children, _children);
+    const { children, allProps } = this._getIdealPropsAndChildren(nextProps);
+    if (Object.values(children).length) {
+      Object.assign(this.children, children);
     }
     if (Object.values(this.props).length) {
       Object.assign(this.props, allProps.attrs);
     }
+    if (Object.values(allProps.events).length) {
+      this.events = allProps.events;
+    }
+    this.removeEvents();
+    this.addEvents();
+
     Object.entries(this.props).forEach((item) => {
       if (!item[1]) {
         delete this.props[item[0]];
@@ -97,7 +107,7 @@ export default class Block extends EventBus {
   }
 
   public show(): void {
-    this.getContent()!.style.display = 'block';
+    this.getContent()!.style.display = 'flex';
   }
 
   public hide(): void {
@@ -111,7 +121,7 @@ export default class Block extends EventBus {
     this.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
   }
 
-  public compile(template: string, props: typicalObject = {}): Node | null {
+  public compile(template: string, props: TBlockProps | {} = {}): Node | null {
     if (!template) {
       return null;
     }
@@ -121,14 +131,14 @@ export default class Block extends EventBus {
     }
 
     const propsAndStubs = { ...props };
-    Object.entries(this._children).forEach(([key, child]) => {
+    Object.entries(this.children).forEach(([key, child]) => {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
     });
 
     const htmlTpl = this._createDocumentElement('template') as HTMLTemplateElement;
     htmlTpl.innerHTML = Handlebars.compile(template)(propsAndStubs);
 
-    Object.values(this._children).forEach((child) => {
+    Object.values(this.children).forEach((child) => {
       const stub = htmlTpl.content.querySelector(`[data-id="${child._id}"]`);
       if (stub) {
         stub.replaceWith(child.getContent()!);
@@ -137,16 +147,18 @@ export default class Block extends EventBus {
     return htmlTpl.content;
   }
 
-  /* PRIVATE */
-  _getIdealPropsAndChildren(allPropsAndChildren) {
-    const _children = {};
+  private _getIdealPropsAndChildren(allPropsAndChildren: TBlockProps | IObject) {
+    const children = {};
     const allProps = { events: {}, attrs: {} };
     Object.entries(allPropsAndChildren).forEach(([key, value]) => {
+      if (!value && key != 'disabled') {
+        return;
+      }
       if (value instanceof Block) {
-        _children[key] = value;
+        children[key] = value;
       } else if (key.startsWith('listBlock')) {
         Object.values(value as object).forEach((value2) => {
-          _children[value2._id] = value2;
+          children[value2._id] = value2;
         });
         allProps.attrs[key] = value;
       } else {
@@ -157,7 +169,7 @@ export default class Block extends EventBus {
         }
       }
     });
-    return { _children, allProps };
+    return { children, allProps };
   }
 
   private _createResources(): void {
@@ -167,7 +179,7 @@ export default class Block extends EventBus {
 
   private _render(): void {
     const block = this.render() as Node;
-    this._removeEvents();
+    this.removeEvents();
     this._element!.innerHTML = '';
     this._element!.append(block);
     this.addEvents();
@@ -176,34 +188,34 @@ export default class Block extends EventBus {
 
   private _componentDidMount(): void {
     this.componentDidMount();
-    Object.values(this._children).forEach((child) => {
+    Object.values(this.children).forEach((child) => {
       child.dispatchComponentDidMount();
     });
   }
 
-  private _componentDidUpdate(oldProps, newProps): void {
+  private _componentDidUpdate(oldProps?: TBlockProps, newProps?: TBlockProps): void {
     const response = this.componentDidUpdate(oldProps, newProps);
     if (response) {
       this.emit(Block.EVENTS.FLOW_RENDER);
     }
   }
 
-  private _makePropsProxy(props) {
+  private _makePropsProxy(props: TBlockProps): TBlockProps {
     const checkPrivateProp = (prop) => prop.startsWith('_');
 
     return new Proxy(props, {
-      get(target, prop) {
+      get(target: TBlockProps, prop: string) {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set: (target, prop, value) => {
+      set: (target: TBlockProps, prop: string, value) => {
         if (target[prop] !== value) {
           target[prop] = value;
           this._setUpdate = true;
         }
         return true;
       },
-      deleteProperty(target, prop) {
+      deleteProperty(target: TBlockProps, prop: string) {
         if (checkPrivateProp(prop)) {
           throw new Error('Нет прав');
         } else {
@@ -214,24 +226,34 @@ export default class Block extends EventBus {
     });
   }
 
-  private _createDocumentElement(tagName): HTMLElement {
+  private _createDocumentElement(tagName: string): HTMLElement {
     const element = document.createElement(tagName);
     element.setAttribute('data-id', this._id);
     return element;
   }
 
-  private _removeEvents(): void {
-    const { events = {} } = this.props;
+  protected removeEvents(): void {
+    const { tagName } = this._meta;
 
-    Object.keys(events).forEach((eventName) => {
-      this._element!.removeEventListener(eventName, events[eventName]);
+    Object.keys(this.events).forEach((eventName) => {
+      if (tagName == 'input') {
+        this.element?.querySelector('input')!.removeEventListener(eventName, this.events[eventName]);
+      } else {
+        this.element!.removeEventListener(eventName, this.events[eventName]);
+      }
     });
   }
 
   protected addEvents(): void {
+    const { tagName } = this._meta;
+
     Object.keys(this.events).forEach((eventName) => {
       const newEventName = eventName.substr(2, eventName.length).toLowerCase();
-      this.element!.addEventListener(newEventName, this.events[eventName]);
+      if (tagName == 'input') {
+        this.element?.querySelector('input')!.addEventListener(newEventName, this.events[eventName]);
+      } else {
+        this.element!.addEventListener(newEventName, this.events[eventName]);
+      }
     });
   }
 
@@ -246,7 +268,11 @@ export default class Block extends EventBus {
         if (attrName == 'tabindex' && tagName.toLowerCase() != 'button') {
           return;
         }
-        if (attrName == 'id' && tagName.toLowerCase() != 'input' && tagName.toLowerCase() != 'form') {
+        if (
+          (attrName == 'id' || attrName == 'type') &&
+          tagName.toLowerCase() != 'input' &&
+          tagName.toLowerCase() != 'form'
+        ) {
           return;
         }
         this._element!.setAttribute(attrName, this.props[attrName]);
@@ -260,8 +286,12 @@ export default class Block extends EventBus {
     return null;
   }
 
-  // @ts-ignore
-  protected componentDidUpdate(oldProps: object, newProps: object): boolean {
-    return true;
+  protected componentDidUpdate(oldProps?: TBlockProps, newProps?: TBlockProps): boolean {
+    return oldProps !== newProps;
+  }
+
+  public destroy(): void {
+    this.removeEvents();
+    this._element?.remove();
   }
 }

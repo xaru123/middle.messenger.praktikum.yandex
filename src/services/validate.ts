@@ -1,30 +1,28 @@
-interface typicalObject {
+interface IObject {
   [index: string]: any;
 }
 
-type listCheckingInput = {
+interface IValidateChecking {
   check: RegExp;
   errorMsg: string;
-};
+}
 
-function clearClassProp(_target: typicalObject, _name: string | symbol, descriptor: typicalObject) {
+function clearClassProp(_target: IObject, _name: string | symbol, descriptor: IObject) {
   const originalMethod = descriptor.value as Function;
 
   descriptor.value = function (...args) {
     this.isValid = true;
-    this.errorMsg = null;
+    this.errorMsg = ' ';
     return originalMethod.call(this, ...args);
   };
 }
 
 export default class Validate {
   errorMsg: string = '';
-  listRegex: listCheckingInput[];
+  listRegex: IValidateChecking[];
   isValid: boolean = true;
 
-  constructor(property) {
-    this.getListRegex(property);
-  }
+  constructor() {}
 
   getListRegex(property) {
     switch (property) {
@@ -126,9 +124,15 @@ export default class Validate {
   }
 
   @clearClassProp
-  start(property, value) {
+  start(input, property: string, value, required: boolean | null = false): void {
+    this.getListRegex(property);
+
     if (!this.isEmpty(value)) {
       this.isValid = false;
+      if (required) {
+        this.errorMsg = 'Обязательное поле';
+      }
+      input.isValid = false;
       return;
     }
     if (this.listRegex) {
@@ -137,9 +141,10 @@ export default class Validate {
         this.checkByRegex(value);
       }
     }
+    input.isValid = this.isValid;
   }
 
-  checkCommon(property, value) {
+  checkCommon(property: string, value): void {
     switch (property) {
       case 'first_name':
       case 'second_name':
@@ -169,7 +174,7 @@ export default class Validate {
     }
   }
 
-  checkByRegex(value) {
+  checkByRegex(value): void {
     this.listRegex.forEach((item) => {
       if (!this.isValid) {
         return;

@@ -1,0 +1,53 @@
+@import '../../style/globalVariableStyle.scss';
+.loader {
+  position: fixed;
+  z-index: 2;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  background-color: #e5e5e533;
+  display: none;
+}
+$offset: 187;
+$duration: 3s;
+i.material-icons.spinner {
+  animation: rotator ($duration) linear infinite, colors ($duration) ease-in-out infinite;
+  font-size: $font-size*4;
+  &:hover {}
+  cursor: default;
+}
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes colors {
+  0% {
+    color: #e77f9e;
+  }
+  50% {
+    color: $color-main;
+  }
+  75% {
+    color: #e77f9e;
+  }
+  100% {
+    color: $color-main;
+  }
+
+  //0% {
+  //  color: $color-minor;
+  //}
+  //50% {
+  //  color: $color-danger;
+  //}
+  //75% {
+  //  color: $color-minor;
+  //}
+  //100% {
+  //  color: $color-danger;
+  //}
+}

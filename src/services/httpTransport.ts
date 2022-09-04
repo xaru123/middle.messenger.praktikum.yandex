@@ -1,72 +1,80 @@
-interface TransportOptions {
-  method: string;
-  timeout?: number;
-  data: XMLHttpRequestBodyInit;
-  headers?: string[];
+import { queryStringify } from '../utils/queryStringify';
+
+enum METHODS {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+  DELETE = 'DELETE',
 }
 
-export default class HTTPTransport {
-  static METHODS: Record<string, string> = {
-    GET: 'GET',
-    PUT: 'PUT',
-    POST: 'POST',
-    DELETE: 'DELETE',
+export type HTTPTransportOptions = {
+  method: METHODS;
+  data: XMLHttpRequestBodyInit;
+  timeout?: number;
+  headers?: Record<string, string>;
+  withCredentials?: boolean;
+};
+
+export class HTTPTransport {
+  public _baseURL: string;
+
+  constructor(_baseURL: string = '') {
+    this._baseURL = _baseURL;
+  }
+
+  public get = (url: string, options: HTTPTransportOptions): Promise<XMLHttpRequest> => {
+    const { data } = options;
+    if (!!data) {
+      url += queryStringify(data);
+    }
+    return this.request(url, { ...options, method: METHODS.GET });
+  };
+  public put = (url: string, options: HTTPTransportOptions): Promise<XMLHttpRequest> => {
+    return this.request(url, { ...options, method: METHODS.PUT });
+  };
+  public post = (url: string, options: HTTPTransportOptions): Promise<XMLHttpRequest> => {
+    return this.request(url, { ...options, method: METHODS.POST });
+  };
+  public delete = (url: string, options: HTTPTransportOptions): Promise<XMLHttpRequest> => {
+    return this.request(url, { ...options, method: METHODS.DELETE });
   };
 
-  get = (url: string, options: TransportOptions) => {
-    return this.request(url, { ...options, method: HTTPTransport.METHODS.GET }, options.timeout);
-  };
-  put = (url: string, options: TransportOptions) => {
-    return this.request(url, { ...options, method: HTTPTransport.METHODS.PUT }, options.timeout);
-  };
-  post = (url: string, options: TransportOptions) => {
-    return this.request(url, { ...options, method: HTTPTransport.METHODS.POST }, options.timeout);
-  };
-  delete = (url: string, options: TransportOptions) => {
-    return this.request(url, { ...options, method: HTTPTransport.METHODS.DELETE }, options.timeout);
-  };
+  public request = (url: string, options: HTTPTransportOptions): Promise<XMLHttpRequest> => {
+    const { method = METHODS.GET, timeout = 5000, data, headers = {}, withCredentials = false } = options;
 
-  request = (url: string, options: TransportOptions, timeout: number = 5000) => {
-    const { headers = {}, method, data } = options;
-    const self = this;
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
       if (!method) {
-        reject(new Error('something bad happened'));
+        reject(new Error(`Метода (${method}) не существует`));
         return;
       }
 
-      const xhr = new XMLHttpRequest();
-      const isGet = method === HTTPTransport.METHODS.GET;
-
-      xhr.open(method, isGet && !!data ? `${url}${self.queryStringify(data)}` : url);
-
+      const xhr = new window.XMLHttpRequest();
+      xhr.open(method, `${this._baseURL}${url}`);
+      xhr.timeout = timeout;
       Object.keys(headers).forEach((key) => {
         xhr.setRequestHeader(key, headers[key]);
       });
 
+      if (withCredentials) {
+        xhr.withCredentials = true;
+      }
       xhr.onload = function () {
-        resolve(xhr);
+        if (xhr.status >= 300) {
+          reject(xhr);
+        } else {
+          resolve(xhr);
+        }
       };
+      xhr.onabort = () => reject(xhr);
+      xhr.onerror = () => reject(xhr);
+      xhr.ontimeout = () => reject(xhr);
 
-      xhr.onabort = reject;
-      xhr.onerror = reject;
-
-      xhr.timeout = timeout;
-      xhr.ontimeout = reject;
-
-      if (isGet || !data) {
+      if (!data) {
         xhr.send();
       } else {
         xhr.send(data);
       }
     });
   };
-
-  queryStringify(data: XMLHttpRequestBodyInit) {
-    return Object.keys(data)
-      .map(function (k, i) {
-        return (i == 0 ? `?${k}` : k) + '=' + data[k];
-      })
-      .join('&');
-  }
 }

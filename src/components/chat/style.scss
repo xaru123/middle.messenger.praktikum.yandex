@@ -4,7 +4,8 @@
   flex: 1;
   padding-top: 10px;
   padding-bottom: 10px;
-  justify-content: center;
+  @include flex-constructor(column, center, null);
+
 }
 .chat-block__content {
   min-height: 0;
@@ -38,17 +39,11 @@
   @include flex-constructor(column, null, null);
 }
 .chat-block__footer {
-  margin-top: auto;
-  padding: 0;
-  @include flex-constructor(row, space-between, null);
+  //margin-top: auto;
+  //padding: 0;
+  //@include flex-constructor(row, space-between, null);
+width: 100%;
 
-  i {
-    padding: 0;
-    align-self: center;
-  }
-  .input-group {
-    width: 100%;
-  }
 }
 .chat-row {
   flex: 1;
@@ -113,7 +108,7 @@
   position: relative;
   display: inline-block;
 }
-.dropdown-content {
+.dropdown-content.logic-block {
   position: absolute;
   display: none;
   margin: 0;
@@ -146,3 +141,4 @@
   animation: fadeIn .3s ease;
   -webkit-animation: fadeIn .3s ease;
 }
+

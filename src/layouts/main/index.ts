@@ -1,14 +1,12 @@
-import { tpl } from './tpl.hbs';
 import Block from '../../services/block';
-import './style.scss';
 import Menu from '../../components/menu';
+import { tpl } from './tpl.hbs';
+import './style.scss';
 
-const menu = new Menu();
-
-export default class LayoutMain extends Block {
+export default class LayoutMain extends Block<{}> {
   constructor(props: object) {
     const newProps = {
-      menu: menu,
+      menu: new Menu(),
       ...props,
     };
     super('div', {

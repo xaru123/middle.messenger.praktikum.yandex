@@ -1,45 +1,25 @@
-import { renderDOM } from './utils/renderDOM';
-import Block from './services/block';
-import './style/styles.scss';
+import { router } from './router';
 
-import SignIn from './pages/auth/signIn';
-import SignUp from './pages/auth/signUp';
+import ChangePassword from './pages/settings/changePassword';
+import ChangeProfile from './pages/settings/changeProfile';
+import Chats from './pages/chats/chats';
 import Error400 from './pages/server/400';
 import Error500 from './pages/server/500';
 import Profile from './pages/settings/profile';
-import ChangeProfile from './pages/settings/changeProfile';
-import ChangePassword from './pages/settings/changePassword';
-import Chats from './pages/chats/chats';
+import SignIn from './pages/auth/signIn';
+import SignUp from './pages/auth/signUp';
+import { AuthController } from './controllers/auth';
 
-const location: string = document.location.pathname;
-let page: Block | null = null;
+import './style/styles.scss';
 
-switch (location) {
-  case '/':
-  case '/auth':
-  case '/auth/sign-in':
-    page = new SignIn();
-    break;
-  case '/auth/sign-up':
-    page = new SignUp();
-    break;
-  case '/chats':
-    page = new Chats();
-    break;
-  case '/settings/profile':
-    page = new Profile();
-    break;
-  case '/settings/change-profile':
-    page = new ChangeProfile();
-    break;
-  case '/settings/change-password':
-    page = new ChangePassword();
-    break;
-  case '/500':
-    page = new Error500();
-    break;
-  default:
-    page = new Error400();
-    break;
-}
-renderDOM('#root', page);
+router
+  .addFunctionForAuthCheck(new AuthController().checkUser)
+  .use('/', new SignIn(), 'div', {}, false)
+  .use('/sign-up', new SignUp(), 'div', {}, false)
+  .use('/messenger', new Chats(), 'div', {}, true)
+  .use('/settings', new Profile(), 'div', {}, true)
+  .use('/settings/change/info', new ChangeProfile(), 'div', {}, true)
+  .use('/settings/change/password', new ChangePassword(), 'div', {}, true)
+  .use('/404', new Error400(), 'div', {}, false)
+  .use('/500', new Error500(), 'div', {}, false)
+  .start();

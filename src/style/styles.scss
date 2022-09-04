@@ -3,7 +3,6 @@
 @import './flexbox.scss';
 @import './scroll.scss';
 @import url('https://fonts.googleapis.com/css2?family=Inter&family=Mulish:wght@200;400&family=Raleway:wght@100;300&display=swap');
-
 * {
   font-family: 'Mulish', sans-serif;
   font-size: $font-size;
@@ -37,4 +36,6 @@ html, body {
   font-weight: bold;
   text-align: center;
 }
-
+span:hover {
+  cursor: default;
+}

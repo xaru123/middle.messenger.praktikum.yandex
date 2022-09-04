@@ -1,18 +1,16 @@
-import { tpl } from './tpl.hbs';
 import Block from '../../services/block';
-import './style.scss';
-import DialogList from '../../components/dialogList';
 import Chat from '../../components/chat';
+import DialogList from '../../components/dialogList';
+import { tpl } from './tpl.hbs';
+import './style.scss';
 
-const dialogList = new DialogList();
 const chat = new Chat();
 
-export default class LayoutChat extends Block {
+export default class LayoutChat extends Block<{}> {
   constructor() {
-    dialogList.on('dialog:chat-open', chat.showChatBlock.bind(chat));
     super('div', {
       class: 'layout-char',
-      dialogList,
+      dialogList: new DialogList(),
       chat,
     });
   }

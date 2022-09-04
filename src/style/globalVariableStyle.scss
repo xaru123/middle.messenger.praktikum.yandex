@@ -1,18 +1,22 @@
 $color-light: #ffffff;
 $color-dark:  #1e1e1e;
 $color-main: #EAA9BD;
-$color-main-dark: #CD627FFF;
+$color-main-dark: rgba(205, 98, 127, 0.73);
 $color-minor: #7774E2;
 $color-minor-light: #74aee2;
 $color-body: #F8F7FB;
 $color-danger: #cb0554;
 $color-gray:  #707070;
 $color-gray-light:  #999999;
-$color-gray-very-light:  #F2F1F1;
+$color-gray-very-light:  rgba(184, 202, 212, 0.38);
+
+$color-success: hsl(120, 25%, 68%);
+$color-warning: #f2cea5;
+$color-info: #607d8b;
 
 $font-size: 15px;
 
-$shadow: 0px 3px 7px 2px rgba(184, 202, 212, 0.38);
+$shadow: 0px 3px 7px 2px $color-gray-very-light;
 
 $logo: url('../../../static/ice_cream.png');
 

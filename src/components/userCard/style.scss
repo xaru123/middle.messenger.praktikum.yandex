@@ -37,3 +37,23 @@
   padding-right: 0;
   color: $color-gray-light;
 }
+.content-avatar:hover {
+  position: relative;
+
+  > .avatar_can-change {
+    background: $color-gray-light;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+
+  &::after {
+    content: 'Поменять аватар';
+    position: absolute;
+    color: $color-dark;
+    font-size: $font-size*0.75;
+    display: flex;
+    align-items: center;
+    inset: 0 25.5%;
+    position: absolute;
+  }
+}

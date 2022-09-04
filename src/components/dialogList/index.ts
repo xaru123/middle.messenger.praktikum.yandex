@@ -1,88 +1,139 @@
-import { tpl } from './tpl.hbs';
-import Block from '../../services/block';
-import './style.scss';
-import SearchBlock from '../searchBlock';
-import DialogItem from '../dialogItem';
 import Avatar from '../avatar';
+import Block from '../../services/block';
+import DialogItem from '../dialogItem';
+import FormCreateChat from '../../forms/createChat';
+import Icon, { TIcon } from '../icon';
+import MessagesController from '../../controllers/messages';
+import SearchBlock, { ISearchBlock } from '../searchBlock';
+import { Modal } from '../modal';
+import { store } from '../../store';
+import { tpl } from './tpl.hbs';
+import './style.scss';
 
-const data = [
-  {
-    userName: 'Андрей',
-    text: 'Изображения',
-    time: '10:49',
-    isLastFromThat: false,
-  },
-  { userName: 'Киноклуб', text: 'Стикер', time: '10:49', isLastFromThat: true },
-  {
-    userName: 'Игорь',
-    text: 'Друзья, у меня для вас особененное ооооооооооооооочень длинное сообщение',
-    time: 'ПН',
-    isLastFromThat: true,
-  },
-];
+import { ChatsController } from '../../controllers/chats';
 
-interface DialogListProps {
-  searchBlock: Block;
+interface IChat {
   class: string;
-  listBlockDialogItem: Block[];
+  chats: [];
+  listBlockDialogItem: [];
+  searchBlock: Block<ISearchBlock>;
+  iconAddChat: Block<TIcon>;
 }
 
-const searchBlock = new SearchBlock();
-const listBlockDialogItem = [];
-data.forEach((item) => {
-  const dialogItemCur = new DialogItem({
-    avatar: new Avatar({
-      src: '',
-    }),
-    ...item,
-  }) as Block;
-  // @ts-ignore
-  listBlockDialogItem.push(dialogItemCur);
-});
+const chatC = new ChatsController();
 
-export default class DialogList extends Block {
+export default class DialogList extends Block<IChat> {
+  chats: [];
+
   constructor() {
+    const searchBlock = new SearchBlock();
+
+    const iconAddChat = new Icon({
+      value: 'add_comment',
+      class: 'material-icons md-36 icon',
+      onClick: () => {
+        const newForm = new FormCreateChat();
+        new Modal({
+          headerTitle: 'Создать чат',
+          listBlockContent: [newForm],
+        });
+      },
+    });
+
     const newProps = {
       class: 'dialogs-block',
+      chats: [],
+      listBlockDialogItem: [],
       searchBlock,
-      listBlockDialogItem,
-    } as DialogListProps;
+      iconAddChat,
+    } as IChat;
     super('div', newProps);
   }
 
-  addEvents() {
-    const dialogList = this._element!.querySelectorAll('.dialog-list');
-
-    if (dialogList.length == 0) {
-      return [];
-    }
-    const dialogsRows = dialogList[0].querySelectorAll('.dialog-list__row');
-
-    dialogsRows.forEach((row) => {
-      row.addEventListener('click', () => {
-        this.clearClassSelected(dialogsRows);
-        row.classList.add('selected');
-        this.emit('dialog:chat-open', true);
+  protected componentDidMount() {
+    store.subscribe((state) => {
+      this.setProps({
+        chats: state.chats,
       });
     });
+    const lastOpenedChat = localStorage.getItem('lastOpenedChat') as string;
 
-    dialogList[0].addEventListener('click', (e: Event) => {
-      const el = e.target as HTMLElement;
-      if (!el.classList.contains('dialog-list')) {
-        return [];
+    if (lastOpenedChat) {
+      this.selectedDialogList(localStorage.getItem('lastOpenedChat'));
+    }
+    chatC.getChats(() => {
+      if (lastOpenedChat) {
+        this.openChatByToken(lastOpenedChat);
       }
-      this.clearClassSelected(dialogsRows);
-
-      this.emit('dialog:chat-open', false);
     });
 
-    super.addEvents();
+    store.subscribe(() => {
+      const data = this.setChatsInfoToBlock();
+      this.setProps({
+        listBlockDialogItem: data,
+      });
+    });
   }
 
-  clearClassSelected(dialogsRows) {
-    dialogsRows.forEach(function (row2) {
-      row2.classList.remove('selected');
+  setChatsInfoToBlock() {
+    const list: Block<{}>[] = [];
+    if (!this.props?.chats?.length) {
+      return;
+    }
+
+    this.props.chats.forEach((chatInformation) => {
+      const dialogItemCur = this.createNewDialogItem(chatInformation);
+      list.push(dialogItemCur);
     });
+    return list;
+  }
+
+  createNewDialogItem(chatInformation): Block<{}> {
+    const avatar = this.addAvatarToDialogItem(chatInformation);
+    const r = new DialogItem({});
+    const pr = {
+      ...chatInformation,
+      avatar,
+      classParentRow: chatInformation.id == localStorage.getItem('lastOpenedChat') ? 'selected' : '',
+      onClick: () => {
+        this.selectedDialogList.call(this, r.props.id);
+      },
+    };
+
+    r.setProps(pr);
+    return r as Block<{}>;
+  }
+
+  addAvatarToDialogItem(chatInformation) {
+    return new Avatar({ src: chatInformation.avatar });
+  }
+
+  selectedDialogList(chatId) {
+    store.setState({ listMessages: [] });
+    MessagesController.leave();
+    localStorage.setItem('lastOpenedChat', `${chatId}`);
+    store.setState({ chatId });
+    this.openChatByToken(chatId);
+  }
+
+  openChatByToken(chatId: string) {
+    if (!chatId) {
+      return;
+    }
+    const chatIdFormatter = +chatId as number;
+    chatC.requestTokenByChatId(chatIdFormatter).then((token) => {
+      this.createConnect(token);
+    });
+  }
+
+  createConnect(token) {
+    let idUsert;
+    if ('id' in store.state?.userInfo) {
+      idUsert = store.state?.userInfo?.id;
+    }
+    const chatId = localStorage.getItem('lastOpenedChat') as string;
+
+    MessagesController.createWebSocket(idUsert, chatId, token);
   }
 
   render(): Node {

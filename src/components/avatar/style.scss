@@ -15,17 +15,4 @@
   background: $color-gray-light;
   opacity: 0.5;
   cursor: pointer;
-
-  &::after {
-    content: 'Поменять аватар';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    color: $color-dark;
-    font-size: $font-size*0.7;
-    display: flex;
-    align-items: center;
-  }
 }

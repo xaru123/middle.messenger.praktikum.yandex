@@ -1,8 +1,8 @@
-import { tpl } from './tpl.hbs';
 import Block from '../../services/block';
+import { tpl } from './tpl.hbs';
 import './style.scss';
 
-export default class LayoutAuth extends Block {
+export default class LayoutAuth extends Block<{}> {
   constructor(props: object) {
     const newProps = {
       ...props,

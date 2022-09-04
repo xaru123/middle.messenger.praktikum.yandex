@@ -5,7 +5,9 @@ export const tpl = `
             <span href="#" id="modal__btn-close">&times;</span>
             <h2 class="logic-block__header modal__header">{{headerTitle}}</h2>
             <div class="modal__body text-center">
-                {{{content}}}
+                  {{#each listBlockContent as |itemContent|}}
+                  <div data-id="{{itemContent._id}}"></div>
+                {{/each}}
             </div>
         </div>
     </div>

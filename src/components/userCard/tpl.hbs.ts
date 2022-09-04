@@ -1,7 +1,7 @@
 export const tpl = `
     <div class="logic-block profile">
-        <h1 class="logic-block__header">{{headerTitle}}</h1>
-        {{{avatar}}}
+        <h1 class="logic-block__header">Профиль</h1>
+          {{{avatar}}}
         <div class="profile__info">
             {{#each order as |orderItem IdOrder|}}
                 <div class="profile__info-row">
