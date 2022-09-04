@@ -1,4 +1,4 @@
-import { HTTPTransport, HTTPTransportOptions } from '../services/HTTPTransport';
+import { HTTPTransport, HTTPTransportOptions } from '../services/httpTransport';
 import { parseJson } from '../utils/parseJson';
 
 type ApiOptions = {
