@@ -14,7 +14,7 @@ export class AuthController {
       .signUp(userData)
       .then(() => {
         new Notification('success', 'Регистрация прошла успешно');
-        router.go('/');
+        router.go('/messenger');
       })
       .catch(handlerError)
       .finally(() => loader.hide());

@@ -9,7 +9,6 @@ export interface IButton {
   onClick?: Function;
   id?: string;
   title?: string;
-  tabindex?: number;
   disabled?: string;
 }
 

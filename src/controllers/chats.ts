@@ -1,3 +1,4 @@
+import Avatar from '../components/avatar';
 import { ChatAPI, IApiChat, IApiChatCreate, IApiChatWithUser } from '../api/chat';
 import { Notification } from '../components/notification';
 import { formatterDate } from '../utils/formatterDate';
@@ -21,7 +22,9 @@ export class ChatsController {
         return chats;
       })
       .catch(handlerError)
-      .finally(() => loader.hide());
+      .finally(() => {
+        loader.hide();
+      });
   }
 
   public createChat(props: IApiChatCreate) {
@@ -110,15 +113,13 @@ export class ChatsController {
 
   private _prepareListChats(listChats: IApiChat[]) {
     const res: any = [];
-    let userInfo;
-    if ('id' in store.state?.userInfo) {
-      userInfo = store.state?.userInfo?.id;
-    }
+    const userInfo = store.state?.userInfo;
 
     listChats.forEach((informationChat) => {
       const lastMsg = informationChat.last_message;
       res.push({
         ...informationChat,
+        avatar: new Avatar({ src: informationChat.avatar }),
         timeFormatted: formatterDate(lastMsg?.time || null),
         isOwn: userInfo!['login'] === (lastMsg?.user?.login || null),
       });

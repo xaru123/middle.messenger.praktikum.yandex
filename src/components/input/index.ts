@@ -9,7 +9,7 @@ export interface TInput {
   class?: string;
   placeholder?: string;
   label?: string;
-  tabindex?: number;
+  autofocus?: string;
   required?: string | null;
   disabled?: string | null;
   title?: string;
@@ -25,8 +25,6 @@ interface validClassProps {
   isValid: true;
   start: Function;
 }
-
-const validClass = new Validate();
 
 export default class Input extends Block<TInput> {
   public _input: HTMLInputElement | null;
@@ -48,7 +46,19 @@ export default class Input extends Block<TInput> {
     this._helper = this.getContent()?.querySelector('.input-group__helper') as HTMLElement;
   }
 
+  addEvents() {
+    this.element?.querySelector('input')!.addEventListener('blur', this.events['onBlur']);
+    this.element?.querySelector('input')!.addEventListener('input', this.events['onInput']);
+    this.element?.querySelector('input')?.addEventListener('keyup', this.events['onKeyup']);
+  }
+  removeEvents() {
+    this.element?.querySelector('input')?.removeEventListener('blur', this.events['onBlur']);
+    this.element?.querySelector('input')?.removeEventListener('input', this.events['onInput']);
+    this.element?.querySelector('input')?.removeEventListener('keyup', this.events['onKeyup']);
+  }
+
   handlerOnBlurInput(e) {
+    const validClass = new Validate();
     validClass.start(e.target, e.target.name, e.target.value, !!this.props?.required);
     this._helper!.textContent = '';
     this.addErrorHelper(validClass.errorMsg);

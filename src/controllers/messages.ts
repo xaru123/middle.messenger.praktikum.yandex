@@ -2,6 +2,7 @@ import { formatterDate } from '../utils/formatterDate';
 import { store } from '../store';
 
 export interface IMessage extends FormData {
+  id: number;
   content: string;
   time: string;
   user_id: number;
@@ -127,14 +128,14 @@ class MessagesController {
     this._wss.addEventListener('open', () => {
       this.handlerOpen();
     });
-    this._wss.addEventListener('close', (event: CloseEvent) => {
-      this.handlerClose(event);
+    this._wss.addEventListener('close', (e: CloseEvent) => {
+      this.handlerClose(e);
     });
-    this._wss.addEventListener('message', (event: MessageEvent) => {
-      this.handlerMessage(event);
+    this._wss.addEventListener('message', (e: MessageEvent) => {
+      this.handlerMessage(e);
     });
-    this._wss.addEventListener('error', (event: ErrorEvent) => {
-      this.handlerError(event);
+    this._wss.addEventListener('error', (e: ErrorEvent) => {
+      this.handlerError(e);
     });
   }
 }

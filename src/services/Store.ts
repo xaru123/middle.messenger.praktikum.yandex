@@ -1,4 +1,4 @@
-import {EventBus} from './eventBus';
+import { EventBus } from './eventBus';
 import { IApiChat } from '../api/chat';
 import { IApiUser } from '../api/user';
 import { IMessage } from '../controllers/messages';

@@ -1,6 +1,5 @@
 import Block from '../block';
 import Route from './Route';
-import { store } from '../../store';
 
 export default class Router {
   static _instance: Router;
@@ -19,10 +18,6 @@ export default class Router {
     this.rootQuery = rootQuery;
 
     Router._instance = this;
-
-    store.subscribe((state) => {
-      this._reLocationByAuth(state.userInfo);
-    });
   }
 
   use(path: string, component: Block<{}>, tag = 'div', props = {}, needCheckAuth: boolean) {
@@ -55,9 +50,9 @@ export default class Router {
     if (!route) {
       return this.go('/404');
     }
-    if (!['/404', '/500'].includes(path)) {
-      this._checkRelocationByAuth(route);
-    }
+    // if (!['/404', '/500'].includes(path)) {
+    this._checkRelocationByAuth(route);
+    // }
 
     if (this.currentRoute && this.currentRoute !== route) {
       this.currentRoute?.leave();
@@ -70,15 +65,6 @@ export default class Router {
   private _checkRelocationByAuth(route): void {
     if (route.needCheckAuth) {
       this.callbackForCheckAuth();
-    }
-  }
-
-  private _reLocationByAuth(userInfo) {
-    const isAuth = Object.keys(userInfo).length;
-    if (isAuth) {
-      if (!this.currentRoute?.needCheckAuth) {
-        return this.go('/messenger');
-      }
     }
   }
 

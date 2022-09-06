@@ -1,5 +1,5 @@
-import {EventBus} from './eventBus';
 import Handlebars from 'handlebars';
+import { EventBus } from './eventBus';
 import { v4 as makeUUID } from 'uuid';
 
 export interface IBlockPropEvent {
@@ -25,7 +25,6 @@ export default class Block<TBlockProps extends {}> extends EventBus {
     'type',
     'id',
     'title',
-    'tabindex',
     'disabled',
     'target',
     'href',
@@ -49,7 +48,10 @@ export default class Block<TBlockProps extends {}> extends EventBus {
     this._meta = { tagName, allProps };
     this.children = children;
     this.events = allProps.events;
-    const newProps = { ...allProps.attrs, __id: this._id } as unknown as TBlockProps;
+    const newProps = {
+      ...allProps.attrs,
+      __id: this._id,
+    } as unknown as TBlockProps;
     this.props = this._makePropsProxy(newProps);
 
     this._registerEvents();
@@ -71,6 +73,7 @@ export default class Block<TBlockProps extends {}> extends EventBus {
       this.emit(Block.EVENTS.FLOW_RENDER);
     }
   }
+
   public setProps(nextProps: TBlockProps | IObject): void {
     if (!nextProps) {
       return;
@@ -233,27 +236,15 @@ export default class Block<TBlockProps extends {}> extends EventBus {
   }
 
   protected removeEvents(): void {
-    const { tagName } = this._meta;
-
     Object.keys(this.events).forEach((eventName) => {
-      if (tagName == 'input') {
-        this.element?.querySelector('input')!.removeEventListener(eventName, this.events[eventName]);
-      } else {
-        this.element!.removeEventListener(eventName, this.events[eventName]);
-      }
+      this.element!.removeEventListener(eventName, this.events[eventName]);
     });
   }
 
   protected addEvents(): void {
-    const { tagName } = this._meta;
-
     Object.keys(this.events).forEach((eventName) => {
       const newEventName = eventName.substr(2, eventName.length).toLowerCase();
-      if (tagName == 'input') {
-        this.element?.querySelector('input')!.addEventListener(newEventName, this.events[eventName]);
-      } else {
-        this.element!.addEventListener(newEventName, this.events[eventName]);
-      }
+      this.element!.addEventListener(newEventName, this.events[eventName]);
     });
   }
 
@@ -261,20 +252,9 @@ export default class Block<TBlockProps extends {}> extends EventBus {
     while (this._element!.attributes.length > 0) {
       this._element!.removeAttribute(this._element!.attributes[0].name);
     }
-    const { tagName } = this._meta;
 
     Object.keys(this.props).forEach((attrName) => {
       if (Block.listAttr.filter((item) => item == attrName).length) {
-        if (attrName == 'tabindex' && tagName.toLowerCase() != 'button') {
-          return;
-        }
-        if (
-          (attrName == 'id' || attrName == 'type') &&
-          tagName.toLowerCase() != 'input' &&
-          tagName.toLowerCase() != 'form'
-        ) {
-          return;
-        }
         this._element!.setAttribute(attrName, this.props[attrName]);
       }
     });

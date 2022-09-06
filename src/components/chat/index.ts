@@ -14,19 +14,20 @@ import './style.scss';
 
 const chatC = new ChatsController();
 
-interface IChat {
-  class: string;
-  avatar: Block<IAvatar>;
-  iconD: Block<TIcon>;
-  sendMsg: Block<{}>;
+export interface IChat {
+  class?: string;
+  ChatName?: string;
+  userAvatar?: Block<IAvatar>;
+  iconD?: Block<TIcon>;
+  sendMsg?: Block<{}>;
   listMessages?: [];
 }
+const userAvatar = new Avatar({});
 
 export default class Chat extends Block<IChat> {
   handleDebounceScroll: Function;
 
-  constructor() {
-    const avatar = new Avatar({});
+  constructor(props?: IChat) {
     const iconD = new Icon({
       value: 'more_vert',
       class: 'icon__msg dropdown-btn material-icons_violet material-icons md-36 icon',
@@ -38,9 +39,11 @@ export default class Chat extends Block<IChat> {
     const sendMsg = new SendMsg();
 
     const newProps = {
+      ...props,
       class: `chat-block logic-block`,
-      avatar,
+      userAvatar,
       iconD,
+      ChatName: '',
       sendMsg,
       listMessages: [],
     } as IChat;
@@ -49,13 +52,10 @@ export default class Chat extends Block<IChat> {
   }
 
   componentDidMount() {
-    store.subscribe((state) => {
-      this.setProps({
-        listMessages: state.listMessages,
-        class: localStorage.getItem('lastOpenedChat') ? `${this.props.class} show` : `chat-block logic-block`,
-      });
+    store.subscribe(() => {
       if (localStorage.getItem('lastOpenedChat')) {
         this.scrollToLastMsg();
+        this.children.sendMsg?._element?.querySelector('input')?.focus();
       }
     });
   }
@@ -93,8 +93,9 @@ export default class Chat extends Block<IChat> {
     });
   }
 
-  handlerScroll(evt: Event) {
-    const list = evt.target as HTMLUListElement;
+  handlerScroll(e: Event) {
+    e.preventDefault();
+    const list = e.target as HTMLUListElement;
     if (list) {
       const height = list.scrollHeight;
       const screenHeight = list.offsetHeight;
@@ -110,7 +111,6 @@ export default class Chat extends Block<IChat> {
   }
 
   scrollUp(length: number) {
-    console.log(length);
     if (length && length % 20 === 0) {
       const props = { offset: length } as IMessageGet;
       MessagesController.getMessages(props);

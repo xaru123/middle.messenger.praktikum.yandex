@@ -15,6 +15,7 @@ export default class SendMsg extends Block<{}> {
       type: 'text',
       id: 'message',
       class: 'input-group',
+      autofocus: 'autofocus',
     });
     const iconAttach = new Icon({
       value: 'attach_file',

@@ -1,10 +1,13 @@
-Pull-request #2
+Pull-request #3
 
 Мессенджер "Моржанка"
 
 Сборки:
 	Parcel: npm run dev
 	Express: npm run start
+
+Тесты
+	npm run test
 
 Макет:
 	https://www.figma.com/file/usOgCK0LX1DwrtuZvBLJ64/FFF
@@ -18,10 +21,8 @@ Netlify:
 	Handlebars
 
 Добавлено/изменено:
-	Файловая иерархия проекта
-	Typescript, EventBus
-	Валидация полей на форме
-	Отправка данных в консоль по нажатию enter
-	При клике кнопок на форме - переход на другую страницу
-	Eslint, stylelint
-	
+	Создание/уадление чата
+	Прогрузка чата с сообщениями
+	Отправка сообщений
+	Изменения профиля пользователя, паролей, аватара
+	Добавлены тесты, роутинг и api

@@ -3,6 +3,7 @@ import { tpl } from './tpl.hbs';
 import './style.scss';
 
 export interface IDialogItem {
+  chatId: string;
   class?: string;
   id?: string;
 }
@@ -15,8 +16,6 @@ export default class DialogItem extends Block<IDialogItem> {
     } as IDialogItem;
     super('i', newProps);
   }
-
-  protected componentDidMount() {}
 
   render(): Node {
     return this.compile(tpl) as Node;

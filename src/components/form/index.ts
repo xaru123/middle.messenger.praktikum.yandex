@@ -16,6 +16,7 @@ export interface IForm {
 }
 
 type TTypicalForValue = string | number | string[];
+
 export interface FormDataFormatterInterface {
   [index: string]: TTypicalForValue;
 }
@@ -154,7 +155,6 @@ export class Form extends Block<IForm> {
     const errorTextContent = this._element?.querySelector('.form-problem') as Node;
     errorTextContent.textContent = '';
 
-    // TODO ОттЕСТИТЬ
     Object.entries(this._formData).forEach((itemCur) => {
       const item = itemCur as FilterValueInterface;
       if (!item[1].valid) {
@@ -170,14 +170,6 @@ export class Form extends Block<IForm> {
           textError = 'Разные пароли';
           errorTextContent.textContent = textError;
         }
-        // if (
-        //     this._formData['oldPassword'].value ==
-        //     this._formData['newPassword'].value &&
-        //     this._formData['oldPassword'].valid &&
-        //     this._formData['newPassword'].valid
-        // ) {
-        //   this._element.querySelector('.form-problem').textContent = '';
-        // }
       }
     });
     return notValidCount == 0;

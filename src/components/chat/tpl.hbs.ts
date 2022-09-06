@@ -1,8 +1,8 @@
 export const tpl = `
   <div class="chat-block__content">
     <div class="chat-block__content-item chat-block__header">
-      <div class="chat-block__header-avatar">{{{avatar}}}</div>
-      <div class="chat-block__header-name">{{ userName }}</div>
+      <div class="chat-block__header-avatar">{{{userAvatar}}}</div>
+      <div class="chat-block__header-name">{{ ChatName }}</div>
       {{{iconD}}}
       <div class="dropdown-content logic-block">
         <ul class="ul">

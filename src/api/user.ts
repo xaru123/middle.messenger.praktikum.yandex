@@ -57,7 +57,6 @@ export class UserAPI extends BaseAPI {
   }
 
   searchForUserByLogin(data: IApiSearch) {
-    console.log(data);
     return this.post('/search', {
       withCredentials: true,
       data: JSON.stringify(data),

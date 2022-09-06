@@ -1,16 +1,18 @@
 import Block from '../../services/block';
-import Chat from '../../components/chat';
+import Chat, { IChat } from '../../components/chat';
 import DialogList from '../../components/dialogList';
 import { tpl } from './tpl.hbs';
 import './style.scss';
 
-const chat = new Chat();
+const chatsProps = {} as IChat;
+const chat = new Chat(chatsProps);
+const dialogList = new DialogList();
 
 export default class LayoutChat extends Block<{}> {
   constructor() {
     super('div', {
       class: 'layout-char',
-      dialogList: new DialogList(),
+      dialogList,
       chat,
     });
   }

@@ -22,10 +22,8 @@ export default class FormCreateChat extends Block<{}> {
       class: 'button form__button',
       value: 'Создать чат',
       disabled: 'disabled',
-      tabindex: 3,
     });
     const inputChatName = new Input({
-      tabindex: 1,
       type: 'text',
       id: 'title',
       label: 'Название чата',
