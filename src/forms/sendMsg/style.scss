@@ -1,5 +1,36 @@
+@import '../../style/globalVariableStyle.scss';
+@import '../../style/mixin.scss';
 #form-send-msg {
+  @include flex-constructor(row, center, center);
+  width: 100%;
+  flex-wrap: nowrap;
+  align-content: center;
+
   .form__item-input {
+    margin: 0;
+    flex: 1;
+  }
+
+  .form__item-input:nth-child(2) {
+    flex: auto;
+  }
+
+  .icon {
+    padding: 0;
+    align-self: center;
+  }
+
+  .icon.attach_file {
+    padding-left: 5px;
+    padding-right: 15px;
+  }
+
+  .icon-reply {
+    border: 0px;
+    background: transparent;
+  }
+
+  .input-group {
     margin: 0;
   }
 }

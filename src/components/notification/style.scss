@@ -1,0 +1,64 @@
+@import '../../style/globalVariableStyle.scss';
+@import '../../style/mixin.scss';
+
+.notification {
+  position: fixed;
+  top: 0.5rem;
+  right: 1rem;
+  @include flex-constructor(column, flex-start, null);
+  color: $color-dark;
+  overflow-x: hidden;
+  padding: 5px;
+  min-width: 300px;
+  z-index: 55555;
+}
+.notification__message {
+  @include flex-constructor(column, start, flex-start);
+  padding: 20px 40px 20px 10px;
+  margin: 1rem 0;
+  background: hsl(0, 0%, 100%);
+  border-radius: 10px;
+  box-shadow: 0 0 5px hsla(0, 0%, 0%, 0.1), 0 2px 3px hsla(0, 0%, 0%, 0.1);
+  border-bottom: 0.5rem solid hsl(0, 0%, 100%);
+  border-left: 0.5rem solid hsl(0, 0%, 100%);
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition-property: transform, opacity, visibility;
+  transition-duration: 0.7s;
+  transition-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+.notification__message p {
+  margin: 0;
+  padding: 10px 0;
+  font-style: italic;
+}
+.notification__message .btn-close {
+  color: #74aee2;
+  font-size: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.notification.received .notification__message {
+  transform: translateX(0%);
+  opacity: 1;
+  visibility: visible;
+}
+$percent :40%;
+.message--info {
+  border-bottom-color: $color-info;
+  border-left-color: lighten($color-info, $percent);
+}
+.message--success {
+  border-bottom-color: $color-success;
+  border-left-color: lighten($color-success, $percent);
+}
+.message--warning {
+  border-bottom-color: $color-warning;
+  border-left-color: lighten($color-warning, $percent);
+}
+.message--danger {
+  border-bottom-color: $color-danger;
+  border-left-color: lighten($color-danger, $percent);
+}

@@ -17,11 +17,24 @@
   "plugins": [
     "@typescript-eslint",
     "eslint-plugin-prettier",
-    "prettier"
+    "prettier",
+    "sort-imports-es6-autofix"
   ],
   "rules": {
     "require-jsdoc": 0,
+    "no-invalid-this": "error",
     "prefer-promise-reject-errors": "error",
-    "no-invalid-this": "error"
+    "import/prefer-default-export": "off",
+    "guard-for-in": "off",
+    "sort-imports-es6-autofix/sort-imports-es6": [2, {
+      "ignoreCase": false,
+      "ignoreMemberSort": false,
+      "memberSyntaxSortOrder": ["single","multiple" , "all","none"]
+    }],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_" }
+    ]
   }
 }

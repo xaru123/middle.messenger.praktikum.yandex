@@ -4,7 +4,7 @@
   flex: 1;
   padding-top: 10px;
   padding-bottom: 10px;
-  justify-content: center;
+  @include flex-constructor(column, center, null);
 }
 .chat-block__content {
   min-height: 0;
@@ -29,7 +29,13 @@
 .chat-block__header {
   border-bottom: 1px solid $color-dark;
   margin-bottom: auto;
-  @include flex-constructor(row, space-between, null);
+  @include flex-constructor(row, flex-start, center);
+  .chat-block__header-name {
+    margin-right: auto;
+    font-weight: bold;
+    font-size: $font-size*1.5;
+    padding: $padding-left *2;
+  }
 }
 .chat-block__main {
   padding: $padding-left *2;
@@ -37,18 +43,9 @@
   overflow-y: auto;
   @include flex-constructor(column, null, null);
 }
-.chat-block__footer {
-  margin-top: auto;
-  padding: 0;
-  @include flex-constructor(row, space-between, null);
 
-  i {
-    padding: 0;
-    align-self: center;
-  }
-  .input-group {
-    width: 100%;
-  }
+.chat-block__footer {
+  width: 100%;
 }
 .chat-row {
   flex: 1;
@@ -113,7 +110,7 @@
   position: relative;
   display: inline-block;
 }
-.dropdown-content {
+.dropdown-content.logic-block {
   position: absolute;
   display: none;
   margin: 0;
@@ -121,6 +118,7 @@
   animation: fadeIn .3s ease;
   -webkit-animation: fadeIn .3s ease;
   z-index: 3;
+
   .ul {
     margin: 0;
     padding: 0;
@@ -138,7 +136,6 @@
     }
   }
 }
-
 .dropdown-content.clicked {
   display: flex;
   right: 70px;
@@ -146,3 +143,4 @@
   animation: fadeIn .3s ease;
   -webkit-animation: fadeIn .3s ease;
 }
+

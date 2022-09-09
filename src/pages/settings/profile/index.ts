@@ -1,15 +1,14 @@
-import { tpl } from './tpl.hbs';
 import Block from '../../../services/block';
 import LayoutMain from '../../../layouts/main';
 import UserCard from '../../../components/userCard';
+import { tpl } from './tpl.hbs';
 
-const content = new UserCard({});
-const layout = new LayoutMain({
-  layoutContent: content,
-});
-
-export default class Profile extends Block {
+export default class Profile extends Block<{}> {
   constructor() {
+    const content = new UserCard();
+    const layout = new LayoutMain({
+      layoutContent: content,
+    });
     const newProps = {
       layout,
       class: 'content',

@@ -1,70 +1,77 @@
-import { tpl } from './tpl.hbs';
-import Block from '../../services/block';
-import './style.scss';
 import Avatar from '../avatar';
+import Block from '../../services/block';
 import Link from '../link';
-import Modal from '../modal';
-import ModalChangeImg from '../../modals/changeImg';
+import { FormChangeAvatar } from '../../forms/changeAvatar';
+import { IAvatar } from '../avatar';
+import { Modal } from '../modal';
+import { store } from '../../store';
+import { tpl } from './tpl.hbs';
+import './style.scss';
 
-const avatar = new Avatar({
-  src: '#',
-  class: 'avatar_big avatar_can-change profile__avatar',
-  onClick: () => {
-    modal.show();
-  },
-});
+interface IUserCard {
+  class?: string;
+  avatar?: Block<IAvatar>;
+  listBlockLinks?: Block<{}>[];
+  order: Record<string, any>;
+}
 
-const modal = new Modal({
-  headerTitle: 'Загрузите файл',
-  content: new ModalChangeImg({}),
-});
-
-const linkChangePassword = new Link({
-  id: 'link',
-  href: './change-password',
-  class: 'link',
-  value: 'Изменить пароль',
-  target: '_self',
-});
-const linkChangeProfile = new Link({
-  id: 'link',
-  href: './change-profile',
-  class: 'link',
-  value: 'Изменить данные',
-  target: '_self',
-});
-
-export default class UserCard extends Block {
-  constructor(props) {
-    const data = {
+export default class UserCard extends Block<IUserCard> {
+  constructor() {
+    const dataSort = {
       order: [
-        { field: 'mail', name: 'Почта' },
+        { field: 'email', name: 'Почта' },
         { field: 'login', name: 'Логин' },
-        { field: 'name', name: 'Имя' },
-        { field: 'surname', name: 'Фамилия' },
-        { field: 'nickname', name: 'Имя в чате' },
-        { field: 'tel', name: 'Телефон' },
+        { field: 'first_name', name: 'Имя' },
+        { field: 'second_name', name: 'Фамилия' },
+        { field: 'display_name', name: 'Имя в чате' },
+        { field: 'phone', name: 'Телефон' },
       ],
-      headerTitle: 'Профиль',
-      userInfo: {
-        mail: 'pochta@yandex.ru',
-        login: 'ivanivanov',
-        name: 'Иван',
-        surname: 'Иванов',
-        nickname: 'Иван',
-        tel: '+7 (909) 967 30 30',
-        avatar: './static/avatar.png',
-      },
+      userInfo: {},
     };
+    const avatar = new Avatar({
+      src: null,
+      class: 'avatar_big avatar_can-change profile__avatar',
+      onClick: () => {
+        new Modal({
+          headerTitle: 'Загрузите файл',
+          listBlockContent: [new FormChangeAvatar()],
+        });
+      },
+    });
+    const linkChangePassword = new Link({
+      id: 'link',
+      href: '/settings/change/password',
+      class: 'link',
+      value: 'Изменить пароль',
+      target: '_self',
+    });
+    const linkChangeProfile = new Link({
+      id: 'link',
+      href: '/settings/change/info',
+      class: 'link',
+      value: 'Изменить данные',
+      target: '_self',
+    });
     const newProps = {
       class: 'user-card',
       avatar,
-      modal,
       listBlockLinks: [linkChangeProfile, linkChangePassword],
-      ...data,
-      ...props,
-    };
+      ...dataSort,
+    } as IUserCard;
     super('div', newProps);
+  }
+
+  protected componentDidMount() {
+    store.subscribe((state) => {
+      this.setProps({
+        userInfo: state.userInfo,
+      });
+      if (state?.userInfo?.avatar) {
+        this.children.avatar.setProps({
+          src: `https://ya-praktikum.tech/api/v2/resources/${state?.userInfo?.avatar}`,
+        });
+      }
+    });
   }
 
   render(): Node {

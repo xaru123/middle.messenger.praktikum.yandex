@@ -32,6 +32,10 @@
 .dialog-item__group_bottom {
   min-width: 0;
   width: 100%;
+  @include flex-constructor(row, start, center);
+}
+.dialog-item__own {
+  color: $color-main-dark;
 }
 .dialog-item__marker {
   width: 10px;

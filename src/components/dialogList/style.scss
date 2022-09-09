@@ -7,6 +7,17 @@
 }
 .dialogs-block__item-search-form {
   margin: 0 0 10px;
+  @include flex-constructor(row, space-between, center);
+  align-content: center;
+
+  .dialogs-block__item-function {
+    .icon {
+      padding: 0 0 0 15px;
+      color: $color-minor;
+      font-size: 50px;
+      text-shadow: -4px 4px 6px #bcbec3;
+    }
+  }
 }
 .dialog-list {
   align-items: stretch;

@@ -1,13 +1,13 @@
-import { tpl } from './tpl.hbs';
 import Block from '../../../services/block';
-import LayoutAuth from '../../../layouts/auth';
 import FormSignUp from '../../../forms/signUp';
+import LayoutAuth from '../../../layouts/auth';
 import Link from '../../../components/link';
+import { tpl } from './tpl.hbs';
 
 const formContent = new FormSignUp();
 const link = new Link({
   id: 'link',
-  href: '/auth/sign-in',
+  href: '/',
   class: 'link',
   value: 'Войти?',
   target: '_self',
@@ -18,7 +18,7 @@ const layout = new LayoutAuth({
   link: link,
 });
 
-export default class SignUp extends Block {
+export default class SignUp extends Block<{}> {
   constructor() {
     const newProps = {
       layout,

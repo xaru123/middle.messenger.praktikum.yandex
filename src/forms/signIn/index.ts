@@ -1,54 +1,56 @@
-import { tpl } from './tpl.hbs';
 import Block from '../../services/block';
-import Form from '../../components/form';
 import Button from '../../components/button';
 import Input from '../../components/input';
+import { AuthController } from '../../controllers/auth';
+import { Form, FormDataFormatterInterface } from '../../components/form';
+import { IApiSignIn } from '../../api/auth';
+import { tpl } from './tpl.hbs';
 import './style.scss';
 
-const btnSubmit = new Button({
-  type: 'button',
-  class: 'button form__button',
-  value: 'Авторизоваться',
-  tabindex: 3,
-  disabled: 'disabled',
-  onClick: function (e) {
-    e.preventDefault();
-    document.location = '/settings/profile';
-  },
-});
-const inputLogin = new Input({
-  tabindex: 1,
-  type: 'text',
-  id: 'login',
-  label: 'Логин',
-  class: 'input-group',
-});
-const inputPassword = new Input({
-  tabindex: 2,
-  type: 'password',
-  id: 'password',
-  label: 'Пароль',
-  class: 'input-group',
-});
-
-const formContent = new Form({
-  id: 'form-sign-in',
-  action: '/',
-  method: 'post',
-  class: 'form flex__item',
-  listBlockInputs: [inputLogin, inputPassword],
-  listBlockBtn: [btnSubmit],
-});
-
-export default class FormSignIn extends Block {
+export default class FormSignIn extends Block<{}> {
   constructor() {
+    const btnSubmit = new Button({
+      type: 'submit',
+      class: 'button form__button',
+      disabled: 'disabled',
+      value: 'Авторизоваться',
+    });
+    const inputLogin = new Input({
+      type: 'text',
+      id: 'login',
+      label: 'Логин',
+      class: 'input-group',
+    });
+    const inputPassword = new Input({
+      type: 'password',
+      id: 'password',
+      label: 'Пароль',
+      class: 'input-group',
+    });
+    const formContent = new Form({
+      id: 'form-sign-in',
+      action: '/',
+      method: 'post',
+      class: 'form flex__item',
+      listBlockInputs: [inputLogin, inputPassword],
+      listBlockBtn: [btnSubmit],
+      submitCallback: (formData: FormDataFormatterInterface): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          new AuthController()
+            .signIn({
+              login: formData.login,
+              password: formData.password,
+            } as IApiSignIn)
+            .then(() => resolve('ok'))
+            .catch((error) => reject(error));
+        });
+      },
+    });
+
     super('div', {
       formContent,
-      class: 'content-form',
     });
   }
-
-  attrDis() {}
 
   render(): Node {
     return this.compile(tpl) as Node;

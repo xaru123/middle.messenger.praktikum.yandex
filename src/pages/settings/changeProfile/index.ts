@@ -1,15 +1,15 @@
-import { tpl } from './tpl.hbs';
 import Block from '../../../services/block';
-import LayoutMain from '../../../layouts/main';
 import FormChangeProfile from '../../../forms/changeProfile';
+import LayoutMain from '../../../layouts/main';
+import { tpl } from './tpl.hbs';
 
-const content = new FormChangeProfile({});
-const layout = new LayoutMain({
-  layoutContent: content,
-});
-
-export default class ChangeProfile extends Block {
+export default class ChangeProfile extends Block<{}> {
   constructor() {
+    const content = new FormChangeProfile({});
+    const layout = new LayoutMain({
+      layoutContent: content,
+    });
+
     const newProps = {
       layout,
       class: 'content',

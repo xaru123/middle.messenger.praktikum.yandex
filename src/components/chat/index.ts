@@ -1,103 +1,127 @@
-import { tpl } from './tpl.hbs';
+import Avatar, { IAvatar } from '../avatar';
 import Block from '../../services/block';
-import './style.scss';
-import Avatar from '../avatar';
-import Icon from '../icon';
-import Modal from '../modal';
-import ModalAddUser from '../../modals/addUser';
-import ModalDelUser from '../../modals/delUser';
+import Icon, { TIcon } from '../icon';
+import MessagesController, { IMessageGet } from '../../controllers/messages';
 import SendMsg from '../../forms/sendMsg';
+import debounce from '../../utils/debounce';
+import { ChatsController } from '../../controllers/chats';
+import { FormAddUser } from '../../forms/addUser';
+import { FormDeleteUser } from '../../forms/deleteUser';
+import { Modal } from '../modal';
+import { store } from '../../store';
+import { tpl } from './tpl.hbs';
+import './style.scss';
 
-const avatar = new Avatar({});
-const modal = new Modal({});
-const sendMsg = new SendMsg();
+const chatC = new ChatsController();
 
-const iconD = new Icon({
-  value: 'more_vert',
-  class: 'icon__msg dropdown-btn material-icons_violet material-icons md-36 icon',
-});
-const iconAttach = new Icon({
-  value: 'attach_file',
-  class: 'material-icons_dark material-icons md-36 icon',
-});
-const iconArrow = new Icon({
-  value: 'arrow_circle_right',
-  class: 'material-icons_dark material-icons md-36 icon',
-  onClick: () => {
-    iconArrow.emit('chat:click-btn-send');
-  },
-});
+export interface IChat {
+  class?: string;
+  ChatName?: string;
+  userAvatar?: Block<IAvatar>;
+  iconD?: Block<TIcon>;
+  sendMsg?: Block<{}>;
+  listMessages?: [];
+}
+const userAvatar = new Avatar({});
 
-const msgList = [
-  {
-    type: 'from',
-    text:
-      'ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd' +
-      'ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
-    time: '12:20',
-  },
-  { type: 'from', text: 'dddddddddd', time: '12:20' },
-  { type: 'to', text: 'eeee', time: 'ПН, 12:20' },
-  { type: 'from', text: 'dddddddddddddddddddd', time: '12:20' },
-  { type: 'to', text: 'e', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-  { type: 'to', text: 'eeee', time: '12:20' },
-];
+export default class Chat extends Block<IChat> {
+  handleDebounceScroll: Function;
 
-export default class Chat extends Block {
-  constructor() {
-    iconArrow.on('chat:click-btn-send', sendMsg.sendRequest.bind(sendMsg));
+  constructor(props?: IChat) {
+    const iconD = new Icon({
+      value: 'more_vert',
+      class: 'icon__msg dropdown-btn material-icons_violet material-icons md-36 icon',
+      onClick: () => {
+        const dropdown = document.querySelector('.dropdown-content')!;
+        dropdown.classList.add('clicked');
+      },
+    });
+    const sendMsg = new SendMsg();
 
     const newProps = {
-      class: 'chat-block logic-block flex flex_direction_column',
-      avatar,
-      iconAttach,
-      iconArrow,
+      ...props,
+      class: `chat-block logic-block`,
+      userAvatar,
       iconD,
-      modal,
+      ChatName: '',
       sendMsg,
-      msgList,
-    };
+      listMessages: [],
+    } as IChat;
     super('div', newProps);
+    this.handleDebounceScroll = debounce(this.handlerScroll.bind(this), 500);
   }
 
-  protected addEvents() {
-    const dropdown = this._element!.querySelector('.dropdown-content')!;
-
-    this._element!.querySelector('.dropdown-btn')!.addEventListener('click', () => {
-      dropdown.classList.add('clicked');
+  componentDidMount() {
+    store.subscribe(() => {
+      if (localStorage.getItem('lastOpenedChat')) {
+        this.scrollToLastMsg();
+        this.children.sendMsg?._element?.querySelector('input')?.focus();
+      }
     });
-
-    this._element!.querySelector('#li-add-user')!.addEventListener('click', () => {
-      const contentModal = new ModalAddUser({});
-      modal.setProps({ content: contentModal, headerTitle: 'Добавить пользователя' });
-      modal.show();
-    });
-    this._element!.querySelector('#li-del-user')!.addEventListener('click', () => {
-      const contentModal = new ModalDelUser({});
-      modal.setProps({ content: contentModal, headerTitle: 'Удалить пользователя' });
-      modal.show();
-    });
-
-    super.addEvents();
   }
 
-  showChatBlock(signShow) {
-    if (signShow) {
-      this._element?.classList.add('show');
-    } else {
-      this._element?.classList.remove('show');
+  addEvents() {
+    const chatDiv = this._element?.querySelector('.chat-block__main');
+    chatDiv?.addEventListener('scroll', (e) => this.handleDebounceScroll(e));
+
+    this._element?.querySelector('#li-add-user')!.addEventListener('click', (e) => {
+      const newForm = new FormAddUser();
+      new Modal({
+        listBlockContent: [newForm],
+        headerTitle: 'Добавить пользователя',
+      });
+      e.stopPropagation();
+    });
+    this._element?.querySelector('#li-del-user')!.addEventListener('click', (e) => {
+      const newForm = new FormDeleteUser();
+      new Modal({
+        listBlockContent: [newForm],
+        headerTitle: 'Удалить пользователя',
+      });
+      e.stopPropagation();
+    });
+    this._element?.querySelector('#li-del-chat')!.addEventListener('click', (e) => {
+      const accept = confirm('Ты уверен, что хочешь удалить этот чат?');
+      if (accept) {
+        const chatId = localStorage.getItem('lastOpenedChat') as string;
+        const chatIdFormatted = +chatId as number;
+        chatC.deleteChat({ chatId: chatIdFormatted });
+        localStorage.removeItem('lastOpenedChat');
+        store.setState({ listMessages: [] });
+      }
+      e.stopPropagation();
+    });
+  }
+
+  handlerScroll(e: Event) {
+    e.preventDefault();
+    const list = e.target as HTMLUListElement;
+    if (list) {
+      const height = list.scrollHeight;
+      const screenHeight = list.offsetHeight;
+      const scrolled = list.scrollTop;
+      const threshold = height - screenHeight / 4;
+      const position = scrolled + screenHeight;
+      if ('listMessages' in this.props) {
+        if (position >= threshold && this.props?.listMessages?.length) {
+          this.scrollUp(this.props.listMessages.length);
+        }
+      }
     }
+  }
+
+  scrollUp(length: number) {
+    if (length && length % 20 === 0) {
+      const props = { offset: length } as IMessageGet;
+      MessagesController.getMessages(props);
+    }
+  }
+
+  scrollToLastMsg() {
+    const list = this._element?.querySelector('.chat-block__main') as HTMLElement;
+    list.scrollTo({
+      top: list.scrollHeight,
+    });
   }
 
   render(): Node {

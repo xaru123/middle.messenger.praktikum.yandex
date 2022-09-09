@@ -3,6 +3,7 @@
 .layout-char {
   flex: 1;
   @include flex-constructor(row, start, center);
+  width: 90%;
 }
 .layout-char__item {
   flex: 1;

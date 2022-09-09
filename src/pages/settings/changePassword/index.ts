@@ -1,14 +1,14 @@
-import { tpl } from './tpl.hbs';
 import Block from '../../../services/block';
-import LayoutMain from '../../../layouts/main';
 import FormChangePassword from '../../../forms/changePassword';
+import LayoutMain from '../../../layouts/main';
+import { tpl } from './tpl.hbs';
 
 const content = new FormChangePassword({});
 const layout = new LayoutMain({
   layoutContent: content,
 });
 
-export default class ChangePassword extends Block {
+export default class ChangePassword extends Block<{}> {
   constructor() {
     const newProps = {
       layout,
