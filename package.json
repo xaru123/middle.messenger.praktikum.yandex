@@ -82,7 +82,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm-run-all test lint:all"
+      "pre-commit": "npm test lint:all"
     }
   },
 "dependencies": {
