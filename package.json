@@ -1,13 +1,13 @@
 {
-  "name": "chat",
+  "name": "my-webpack-project",
   "version": "1.0.0",
-  "description": "Yandex practicum 18. Chat",
+  "description": "My webpack project",
   "author": "",
   "license": "ISC",
   "source": "src/index.html",
   "scripts": {
     "start-dev": "parcel src/index.html --no-cache  --no-source-maps --dist-dir ./dist  ",
-    "build": "parcel build src/index.html --no-source-maps --dist-dir ./dist",
+    "build": "webpack --mode=production --node-env=production",
     "start": "parcel src/index.html --open --port=3000",
     "server": "node ./server.js",
     "lint": "eslint ./src/**/*.ts",
@@ -17,16 +17,25 @@
     "prettier:fix": "npm run prettier -- --write",
     "format": "npm run prettier:fix && npm run lint:fix",
     "stylelint": "stylelint \"./src/**/*.{css, scss}\"",
-    "stylelint:fix": "npm run stylelint --fix"
+    "stylelint:fix": "npm run stylelint --fix",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve"
   },
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "targets": {
+    "web": {
+      "context": "browser",
+      "publicUrl": "./",
+      "distDir": "dist"
+    },
     "default": {
-      "distDir": "dist",
-      "engines": {
-        "browsers": ">= 50%"
-      }
+      "sourceMap": false
     }
+  },
+  "compilerOptions": {
+    "outDir": "dist"
   },
   "engines": {
     "node": "16.16.0"
@@ -38,26 +47,45 @@
     "@types/mocha": "^9.1.1",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
+    "@webpack-cli/generators": "^2.5.0",
+    "autoprefixer": "^10.4.8",
     "chai": "^4.3.6",
+    "css-loader": "^6.7.1",
     "eslint": "^8.21.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
+    "html-webpack-plugin": "^5.5.0",
+    "husky": "^8.0.1",
     "jsdom": "^20.0.0",
+    "mini-css-extract-plugin": "^2.6.1",
     "mocha": "^10.0.0",
     "parcel": "^2.6.2",
     "parcel-transformer-hbs": "^1.0.4",
     "postcss": "^8.4.16",
+    "postcss-loader": "^7.0.1",
     "prettier": "2.7.1",
+    "sass": "^1.54.8",
+    "sass-loader": "^13.0.2",
+    "style-loader": "^3.3.1",
     "stylelint": "^14.10.0",
     "stylelint-config-standard": "^26.0.0",
     "stylelint-config-standard-scss": "^5.0.0",
+    "ts-loader": "^9.3.1",
     "ts-node": "^10.9.1",
-    "typescript": "4.7.4",
-    "uuid": "^8.3.2"
+    "typescript": "^4.7.4",
+    "uuid": "^8.3.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.11.0"
   },
-  "dependencies": {
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm-run-all test lint:all"
+    }
+  },
+"dependencies": {
     "express": "^4.18.1",
     "handlebars": "^4.7.7"
   }
