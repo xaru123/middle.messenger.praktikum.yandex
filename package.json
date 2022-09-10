@@ -6,6 +6,7 @@
   "license": "ISC",
   "source": "src/index.html",
   "scripts": {
+    "prepare": "husky install",
     "start-dev": "parcel src/index.html --no-cache  --no-source-maps --dist-dir ./dist  ",
     "build": "webpack --mode=production --node-env=production",
     "start": "parcel src/index.html --open --port=3000",
