@@ -12,9 +12,7 @@ import { AuthController } from './controllers/auth';
 
 import './style/styles.scss';
 
-router
-
-      .addFunctionForAuthCheck(new AuthController().checkUser)
+router      .addFunctionForAuthCheck(new AuthController().checkUser)
   .use('/', new SignIn(), 'div', {}, false)
   .use('/sign-up', new SignUp(), 'div', {}, false)
   .use('/messenger', new Chats(), 'div', {}, true)
