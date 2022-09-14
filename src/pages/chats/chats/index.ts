@@ -50,9 +50,9 @@ export default class Chats extends Block<{}> {
       this.setHeaderChat(state.chats);
     });
 
-    // this.timer = setInterval(() => {
-    //   chatC.getChats({}, false);
-    // }, 1000 * 30);
+     this.timer = setInterval(() => {
+       chatC.getChats({}, false);
+     }, 1000 * 30);
   }
 
   setHeaderChat(chats) {

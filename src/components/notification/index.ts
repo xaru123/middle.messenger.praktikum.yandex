@@ -19,7 +19,6 @@ interface TNotification {
 
 export class Notification extends Block<TNotification> {
   constructor(type: string, text: string, timeout = 5000) {
-    // @ts-ignore
     const titleNotification = TYPEN[type] as string;
     const newProps = {
       notificationType: type,
