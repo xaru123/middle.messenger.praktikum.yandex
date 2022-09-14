@@ -1,3 +1,4 @@
+import env from '../utils/env';
 import { formatterDate } from '../utils/formatterDate';
 import { store } from '../store';
 
@@ -6,6 +7,9 @@ export interface IMessage extends FormData {
   content: string;
   time: string;
   user_id: number;
+}
+export interface IMessageSend extends FormData {
+  message: string;
 }
 
 export interface IMessageGet extends FormData {
@@ -25,7 +29,7 @@ class MessagesController {
     this._userId = userId;
     this._chatId = chatId;
     this._token = token;
-    this._wss = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`);
+    this._wss = new WebSocket(`${env.SWAGGER_WS}/chats/${userId}/${chatId}/${token}`);
     this.addEvents();
   }
 
@@ -39,9 +43,6 @@ class MessagesController {
   }
 
   sendMessage(message: string) {
-    if (message == '') {
-      return [];
-    }
     this._wss.send(
       JSON.stringify({
         content: message,

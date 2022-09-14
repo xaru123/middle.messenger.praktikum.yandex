@@ -1,4 +1,5 @@
 import Block from '../../services/block';
+// @ts-ignore
 import avatarDefault from '../../../static/avatarDefault.png';
 import { tpl } from './tpl.hbs';
 import './style.scss';

@@ -1,7 +1,7 @@
 import Block from '../../services/block';
 import Button from '../../components/button';
 import Input from '../../components/input';
-import { Form } from '../../components/form';
+import { Form, FormDataFormatterInterface } from '../../components/form';
 import { IApiPassword } from '../../api/user';
 import { UserController } from '../../controllers/user';
 import { router } from '../../router';
@@ -52,20 +52,11 @@ export default class FormChangePassword extends Block<{}> {
     const formContent = new Form({
       id: 'test',
       class: 'form flex__item',
-      listBlockInputs: [inputPassword, inputPasswordOld, inputPasswordNew],
+      listBlockInputs: [inputPasswordOld, inputPassword, inputPasswordNew],
       listBlockBtn: [btnBack, btnSubmit],
-      submitCallback: (formData): Promise<string> => {
-        return new Promise((resolve) => {
-          const userC = new UserController();
-          userC
-            .changePassword({
-              oldPassword: formData.password,
-              newPassword: formData.newPassword,
-            } as IApiPassword)
-            .then(() => {
-              resolve('OK');
-            });
-        });
+      submitCallback: (formData: FormDataFormatterInterface<IApiPassword>) => {
+        const userC = new UserController();
+        userC.changePassword(formData);
       },
     });
 

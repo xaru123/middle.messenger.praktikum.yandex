@@ -2,15 +2,13 @@ import Handlebars from 'handlebars';
 import { EventBus } from './eventBus';
 import { v4 as makeUUID } from 'uuid';
 
-export interface IBlockPropEvent {
-  [eventName: string]: EventListener;
-}
+export type IBlockPropEvent = Record<string, EventListener>;
 
 interface IObject {
   [index: string]: any;
 }
 
-export default class Block<TBlockProps extends {}> extends EventBus {
+export default class Block<TBlockProps extends {} = {}> extends EventBus {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',

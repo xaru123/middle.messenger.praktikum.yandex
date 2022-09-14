@@ -1,93 +1,81 @@
 {
-  "name": "my-webpack-project",
+  "name": "Ice Cream chat",
   "version": "1.0.0",
-  "description": "My webpack project",
-  "author": "",
+  "description": "Мессенджер Моржанка",
+  "keywords": [],
+  "author": "Bagaeva Alena",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xaru123/middle.messenger.praktikum.yandex/issues"
+  },
+  "homepage": "https://github.com/xaru123/middle.messenger.praktikum.yandex#readme",
   "source": "src/index.html",
   "scripts": {
-    "prepare": "husky install",
-    "start-dev": "parcel src/index.html --no-cache  --no-source-maps --dist-dir ./dist  ",
-    "build": "webpack --mode=production --node-env=production",
-    "start": "parcel src/index.html --open --port=3000",
-    "server": "node ./server.js",
-    "lint": "eslint ./src/**/*.ts",
+    "precommit": "npm run test && npm run lint",
     "test": "mocha",
+    "lint": "eslint ./src/**/*.ts",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier ./src/**/*.ts --check",
     "prettier:fix": "npm run prettier -- --write",
     "format": "npm run prettier:fix && npm run lint:fix",
     "stylelint": "stylelint \"./src/**/*.{css, scss}\"",
     "stylelint:fix": "npm run stylelint --fix",
-    "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "serve": "webpack serve"
+    "serve": "webpack serve",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "build": "webpack",
+    "start": "webpack && node ./server.js",
+    "docker:create": "docker build -t icecream .",
+    "heroku:push": "heroku container:push web",
+    "heroku:release": "heroku container:release web"
   },
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "targets": {
-    "web": {
-      "context": "browser",
-      "publicUrl": "./",
-      "distDir": "dist"
-    },
     "default": {
-      "sourceMap": false
+      "distDir": "dist",
+      "engines": {
+        "browsers": ">= 50%"
+      }
     }
-  },
-  "compilerOptions": {
-    "outDir": "dist"
   },
   "engines": {
     "node": "16.16.0"
   },
   "devDependencies": {
-    "@parcel/transformer-inline-string": "^2.6.2",
-    "@parcel/transformer-sass": "^2.6.2",
-    "@types/chai": "^4.3.3",
-    "@types/mocha": "^9.1.1",
-    "@typescript-eslint/eslint-plugin": "^5.32.0",
-    "@typescript-eslint/parser": "^5.32.0",
-    "@webpack-cli/generators": "^2.5.0",
-    "autoprefixer": "^10.4.8",
-    "chai": "^4.3.6",
-    "css-loader": "^6.7.1",
-    "eslint": "^8.21.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
-    "html-webpack-plugin": "^5.5.0",
-    "husky": "^8.0.1",
-    "jsdom": "^20.0.0",
-    "mini-css-extract-plugin": "^2.6.1",
-    "mocha": "^10.0.0",
-    "parcel": "^2.6.2",
-    "parcel-transformer-hbs": "^1.0.4",
-    "postcss": "^8.4.16",
-    "postcss-loader": "^7.0.1",
+    "@types/chai": "4.3.3",
+    "@types/mocha": "9.1.1",
+    "@typescript-eslint/eslint-plugin": "5.32.0",
+    "@typescript-eslint/parser": "5.32.0",
+    "@webpack-cli/generators": "2.5.0",
+    "chai": "4.3.6",
+    "css-loader": "6.7.1",
+    "eslint": "8.21.0",
+    "eslint-config-google": "0.14.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-sort-imports-es6-autofix": "0.6.0",
+    "html-webpack-plugin": "5.5.0",
+    "jsdom": "20.0.0",
+    "mini-css-extract-plugin": "2.6.1",
+    "mocha": "10.0.0",
     "prettier": "2.7.1",
-    "sass": "^1.54.8",
-    "sass-loader": "^13.0.2",
-    "style-loader": "^3.3.1",
-    "stylelint": "^14.10.0",
-    "stylelint-config-standard": "^26.0.0",
-    "stylelint-config-standard-scss": "^5.0.0",
-    "ts-loader": "^9.3.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.7.4",
-    "uuid": "^8.3.2",
-    "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.11.0"
+    "sass": "1.54.9",
+    "sass-loader": "13.0.2",
+    "style-loader": "3.3.1",
+    "stylelint": "14.10.0",
+    "stylelint-config-standard": "26.0.0",
+    "stylelint-config-standard-scss": "5.0.0",
+    "ts-loader": "9.3.1",
+    "ts-node": "10.9.1",
+    "typescript": "4.8.3",
+    "uuid": "8.3.2",
+    "webpack": "5.74.0",
+    "webpack-cli": "4.10.0",
+    "webpack-dev-server": "4.11.0",
+    "husky": "8.0.1",
+    "eslint-config-prettier": "8.5.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm test lint:all"
-    }
-  },
-"dependencies": {
-    "express": "^4.18.1",
-    "handlebars": "^4.7.7"
+  "dependencies": {
+    "express": "4.18.1",
+    "handlebars": "4.7.7"
   }
 }

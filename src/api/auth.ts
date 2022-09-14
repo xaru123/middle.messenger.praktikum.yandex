@@ -9,10 +9,10 @@ export interface IApiSignUp {
   password: string;
 }
 
-export interface IApiSignIn {
+export type IApiSignIn = {
   login: string;
   password: string;
-}
+};
 
 export class AuthAPI extends BaseAPI {
   constructor() {

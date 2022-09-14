@@ -3,7 +3,6 @@
   position: relative;
   margin-bottom: $margin-bottom;
 }
-/*.input-group__content > */
 input {
   border: none;
   height: 45px;
@@ -11,7 +10,12 @@ input {
   color: $color-dark;
   background: transparent;
   margin-bottom: 10px;
-  width: 100%;
+  width: 100% !important;
+
+  &:focus {
+    outline: none;
+    border-color: $color-minor-light;
+  }
 
   &:hover {
     border-color: $color-minor-light;
@@ -22,7 +26,6 @@ input {
     }
   }
 }
-/*.input-group__content > */
 .input-group__label {
   position: absolute;
   top: -0.5rem;
@@ -30,26 +33,22 @@ input {
   transition: top 0.2s;
   font-weight: 600;
 }
-/*.input-group__content > */
 .input-group__helper {
   color: $color-danger;
   padding: $padding-top 0 0 0;
   line-height: $font-size * 0.7;
   font-size: $font-size * 0.7;
 }
-/*.input-group__content > */
-input:focus {
-  outline: none;
-}
 .li .input-group__label {
   position: relative;
 }
-input[type="checkbox"] {
+input[type='checkbox'] {
   &:not(:checked),
   &:checked {
     position: absolute;
     left: 0;
     opacity: 0;
+    z-index: 2;
   }
 
   + label > .input-group__label {
@@ -58,16 +57,16 @@ input[type="checkbox"] {
     top: 0;
   }
 }
-[type="checkbox"]:not(:checked) + label,
-[type="checkbox"]:checked + label {
+[type='checkbox']:not(:checked) + label,
+[type='checkbox']:checked + label {
   position: relative;
   padding-left: 2.3em;
   font-size: 1.05em;
   line-height: 1.7;
   cursor: pointer;
 }
-[type="checkbox"]:not(:checked) + label:before,
-[type="checkbox"]:checked + label:before {
+[type='checkbox']:not(:checked) + label:before,
+[type='checkbox']:checked + label:before {
   content: '';
   position: absolute;
   left: 0;
@@ -81,8 +80,8 @@ input[type="checkbox"] {
   -webkit-transition: all .275s;
   transition: all .275s;
 }
-[type="checkbox"]:not(:checked) + label:after,
-[type="checkbox"]:checked + label:after {
+[type='checkbox']:not(:checked) + label:after,
+[type='checkbox']:checked + label:after {
   content: '✕';
   position: absolute;
   top: .525em;
@@ -93,12 +92,12 @@ input[type="checkbox"] {
   -webkit-transition: all .2s;
   transition: all .2s;
 }
-[type="checkbox"]:not(:checked) + label:after {
+[type='checkbox']:not(:checked) + label:after {
   opacity: 0;
   -webkit-transform: scale(0) rotate(45deg);
   transform: scale(0) rotate(45deg);
 }
-[type="checkbox"]:checked + label:after {
+[type='checkbox']:checked + label:after {
   opacity: 1;
   -webkit-transform: scale(1) rotate(0);
   transform: scale(1) rotate(0);

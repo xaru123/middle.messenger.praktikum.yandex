@@ -12,8 +12,8 @@ export class FormChangeAvatar extends Block<{}> {
     const inputFile = new Input({
       type: 'file',
       label: '',
-      id: 'file',
-      name: 'file',
+      id: 'avatar',
+      name: 'avatar',
     });
     const btnSubmit = new Button({
       type: 'submit',
@@ -21,26 +21,22 @@ export class FormChangeAvatar extends Block<{}> {
       value: 'Поменять',
     });
 
-    const formContent1 = new Form({
+    const formContent = new Form({
       id: 'form-change-avatar',
       action: '/',
       method: 'post',
       class: 'form flex__item',
       listBlockInputs: [inputFile],
       listBlockBtn: [btnSubmit],
-      submitCallback: (formData: FormDataFormatterInterface): Promise<string> => {
-        return new Promise((resolve) => {
-          const userC = new UserController();
-          const formFile = new FormData();
-          formFile.append('avatar', formData.file as string);
-          userC.changeAvatar(formFile as IApiAvatar).finally(() => {
-            resolve('OK');
-          });
-        });
+      submitCallback: (formData: FormDataFormatterInterface<IApiAvatar>) => {
+        const userC = new UserController();
+        const formFile = new FormData();
+        formFile.append('avatar', formData.avatar as string);
+        userC.changeAvatar(formFile as IApiAvatar);
       },
     });
     super('div', {
-      formContent1,
+      formContent,
     });
   }
 

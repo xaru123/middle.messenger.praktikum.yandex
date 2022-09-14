@@ -21,7 +21,6 @@ export default class FormCreateChat extends Block<{}> {
       type: 'submit',
       class: 'button form__button',
       value: 'Создать чат',
-      disabled: 'disabled',
     });
     const inputChatName = new Input({
       type: 'text',
@@ -38,30 +37,28 @@ export default class FormCreateChat extends Block<{}> {
       class: 'form flex__item',
       listBlockInputs: [inputChatName, search],
       listBlockBtn: [btnSubmit],
-      submitCallback: (formData: FormDataFormatterInterface, contextForm: Block<{}>, e: Event): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          const listInputChecked = contextForm?._element?.querySelectorAll(':checked') as NodeListOf<HTMLInputElement>;
-          if (listInputChecked && !listInputChecked.length) {
-            new Notification('danger', 'Не выбраны пользователи');
-            e.preventDefault();
-            e.stopPropagation();
-            return reject(new Error());
-          }
-          chatC
-            .createChat({
-              title: formData.title,
-            } as IApiChatCreate)
-            .then((response) => {
-              chatC.addUsersToChat({
-                users: formData.users,
-                chatId: response.id,
-              } as IApiChatWithUser);
-            })
-            .finally(() => {
-              chatC.getChats();
-              resolve('OK');
-            });
-        });
+      submitCallback: (
+        formData: FormDataFormatterInterface<IApiChatCreate & IApiChatWithUser>,
+        contextForm: Block<{}>,
+        e: Event,
+      ) => {
+        const listInputChecked = contextForm?._element?.querySelectorAll(':checked') as NodeListOf<HTMLInputElement>;
+        if (listInputChecked && !listInputChecked.length) {
+          new Notification('danger', 'Не выбраны пользователи');
+          e.preventDefault();
+          e.stopPropagation();
+          return [];
+        }
+        chatC
+          .createChat({
+            title: formData.title,
+          } as IApiChatCreate)
+          .then((response) => {
+            chatC.addUsersToChat({
+              users: formData.users,
+              chatId: response.id,
+            } as IApiChatWithUser);
+          });
       },
     });
 

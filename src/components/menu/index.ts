@@ -1,8 +1,12 @@
 import Avatar from '../avatar';
 import Block from '../../services/block';
+import Button from '../button';
+import Confirm from '../confirm';
 import Icon from '../icon';
 import Link from '../link';
+import env from '../../utils/env';
 import { AuthController } from '../../controllers/auth';
+import { Modal } from '../modal';
 import { store } from '../../store';
 import { tpl } from './tpl.hbs';
 import './style.scss';
@@ -10,39 +14,47 @@ import './style.scss';
 export default class Menu extends Block<{}> {
   constructor() {
     const linkMsg = new Link({
-      id: 'link',
+      id: 'link-msg',
       href: '/messenger',
       class: 'link menu__item menu__item-msg menu__item_center',
       value: new Icon({
         value: 'chat',
       }),
-      target: '_self',
     });
 
     const linkSettings = new Link({
-      id: 'link',
+      id: 'link-settings',
       href: '/settings',
       class: 'link menu__item menu__item-setting',
       value: new Icon({
         value: 'settings',
       }),
-      target: '_self',
     });
 
-    const linkExit = new Link({
-      id: 'link',
-      href: '/',
-      class: 'link menu__item menu__item-exit',
+    const linkExit = new Button({
+      type: 'button',
+      id: 'btn-exit',
+      class: 'menu__item menu__item-exit',
+
       value: new Icon({
         value: 'logout',
+        class: ' material-icons icon',
       }),
-      target: '_self',
       onClick: (e) => {
-        const accept = confirm('Ты уверен, что хочешь выйти?');
-        if (accept) {
-          new AuthController().signOut();
-        }
-        e.preventDefault();
+        const newM = new Modal({
+          listBlockContent: [],
+          headerTitle: 'Требуется подтверждение',
+        });
+
+        const newForm = new Confirm({
+          question: 'Ты уверен, что хочешь выйти из системы?',
+          acceptFunction: () => {
+            new AuthController().signOut();
+            newM.hide();
+          },
+        });
+        newM.setProps({ listBlockContent: [newForm] });
+        newM.show();
         e.stopPropagation();
       },
     });
@@ -59,7 +71,7 @@ export default class Menu extends Block<{}> {
     store.subscribe((state) => {
       if (state?.userInfo?.avatar) {
         this.children.avatar.setProps({
-          src: `https://ya-praktikum.tech/api/v2/resources/${state?.userInfo?.avatar}`,
+          src: `${env.SWAGGER_RESOURCES}/${state?.userInfo?.avatar}`,
         });
       }
     });

@@ -1,12 +1,10 @@
-export default function debounce(func: Function, time: number): Function {
-  let isCooldown: boolean = false;
+export default function debounce(func: Function, time: number) {
+  let timeout: ReturnType<typeof setTimeout>;
   return (...args) => {
-    if (isCooldown) {
-      return;
+    if (timeout) {
+      clearTimeout(timeout);
     }
     /* eslint no-invalid-this: ["off"]*/
-    func.apply(this, args);
-    isCooldown = true;
-    setTimeout(() => (isCooldown = false), time);
+    timeout = setTimeout(() => func.apply(this, args), time);
   };
 }

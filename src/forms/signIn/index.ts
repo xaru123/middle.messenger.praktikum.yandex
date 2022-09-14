@@ -12,7 +12,6 @@ export default class FormSignIn extends Block<{}> {
     const btnSubmit = new Button({
       type: 'submit',
       class: 'button form__button',
-      disabled: 'disabled',
       value: 'Авторизоваться',
     });
     const inputLogin = new Input({
@@ -27,23 +26,19 @@ export default class FormSignIn extends Block<{}> {
       label: 'Пароль',
       class: 'input-group',
     });
-    const formContent = new Form({
+    const formContent = new Form<IApiSignIn>({
       id: 'form-sign-in',
       action: '/',
       method: 'post',
       class: 'form flex__item',
       listBlockInputs: [inputLogin, inputPassword],
       listBlockBtn: [btnSubmit],
-      submitCallback: (formData: FormDataFormatterInterface): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          new AuthController()
-            .signIn({
-              login: formData.login,
-              password: formData.password,
-            } as IApiSignIn)
-            .then(() => resolve('ok'))
-            .catch((error) => reject(error));
-        });
+      submitCallback: (formData: FormDataFormatterInterface<IApiSignIn>) => {
+        const data = {
+          login: formData.login,
+          password: formData.password,
+        };
+        new AuthController().signIn(data);
       },
     });
 

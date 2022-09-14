@@ -7,7 +7,7 @@ export default class Router {
   public routes: Route[];
   public history: History;
   public currentRoute: Route | null;
-  public callbackForCheckAuth: () => void;
+  public callbackForCheckAuth: () => Promise<{}>;
 
   constructor(rootQuery = '#root') {
     if (Router._instance) return Router._instance;
@@ -20,8 +20,8 @@ export default class Router {
     Router._instance = this;
   }
 
-  use(path: string, component: Block<{}>, tag = 'div', props = {}, needCheckAuth: boolean) {
-    this.routes.push(new Route(path, component, tag, { ...props, rootQuery: this.rootQuery }, needCheckAuth));
+  use(path: string, component: Block<{}>, props = {}) {
+    this.routes.push(new Route(path, component, { ...props, rootQuery: this.rootQuery }));
     return this;
   }
 
@@ -50,25 +50,30 @@ export default class Router {
     if (!route) {
       return this.go('/404');
     }
-    // if (!['/404', '/500'].includes(path)) {
-    this._checkRelocationByAuth(route);
-    // }
-
     if (this.currentRoute && this.currentRoute !== route) {
       this.currentRoute?.leave();
     }
     this.currentRoute = route;
 
-    route.render();
+    this._checkRelocationByAuth(route);
   }
 
   private _checkRelocationByAuth(route): void {
-    if (route.needCheckAuth) {
-      this.callbackForCheckAuth();
+    if (!this.callbackForCheckAuth) {
+      return;
     }
+    this.callbackForCheckAuth().then((responce) => {
+      if (responce && !route.props.needAuth) {
+        return this.go('/messenger');
+      } else if (!responce && route.props.needAuth) {
+        return this.go('/');
+      } else {
+        route.render();
+      }
+    });
   }
 
-  addFunctionForAuthCheck(callback: () => void) {
+  addFunctionForAuthCheck(callback) {
     this.callbackForCheckAuth = callback;
     return this;
   }

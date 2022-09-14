@@ -36,6 +36,7 @@
 }
 .dialog-item__own {
   color: $color-main-dark;
+  margin: 0;
 }
 .dialog-item__marker {
   width: 10px;
@@ -45,4 +46,10 @@
   background: $color-minor;
   right: 5px;
   bottom: 10px;
+}
+.dialog-item__user-time{
+  font-size: 12px
+}
+.dialog-item__avatar{
+  padding-right: 5%;
 }

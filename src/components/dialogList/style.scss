@@ -12,29 +12,29 @@
 
   .dialogs-block__item-function {
     .icon {
-      padding: 0 0 0 15px;
-      color: $color-minor;
-      font-size: 50px;
-      text-shadow: -4px 4px 6px #bcbec3;
+      padding-left: 15px;
     }
   }
 }
-.dialog-list {
+div.dialog-list {
+  padding: 0;
   align-items: stretch;
   flex: 1;
   @include flex-constructor(column, start, stretch);
 
   .dialog-list__row {
-    border-bottom: 1px solid black;
-    margin-bottom: 15px;
-  }
+    padding: 5%;
+    border-bottom: 1px solid $color-selected;
 
-  .dialog-list__row:hover {
-    background: $color-gray-very-light;
-  }
+    &.selected:first-child,
+    &:first-child:hover {
+      border-radius: $radius-big $radius-big 0 0;
+    }
 
-  .dialog-list__row.selected {
-    background: $color-gray-very-light;
+    &.selected,
+    &:hover {
+      background: $color-selected;
+    }
   }
 
   .profile__avatar {

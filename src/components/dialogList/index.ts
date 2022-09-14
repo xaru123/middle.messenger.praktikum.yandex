@@ -8,7 +8,7 @@ import './style.scss';
 
 interface IChat {
   class: string;
-  listBlockDialogItem: [];
+  listBlockDialogItem: Block<{}>[];
   searchBlock: Block<ISearchBlock>;
   iconAddChat: Block<TIcon>;
 }
@@ -19,7 +19,7 @@ export default class DialogList extends Block<IChat> {
 
     const iconAddChat = new Icon({
       value: 'add_comment',
-      class: 'material-icons md-36 icon',
+      class: 'material-icons md-48 icon material-icons_violet',
       onClick: () => {
         const newForm = new FormCreateChat();
         new Modal({

@@ -1,9 +1,6 @@
 import { Store } from './services/Store';
-
-const store1 = new Store({
+export const store = new Store({
   userInfo: {},
   chats: [],
   listMessages: {},
 });
-
-export const store = store1;

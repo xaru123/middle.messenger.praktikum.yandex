@@ -9,7 +9,6 @@ const link = new Link({
   href: '/sign-up',
   class: 'link',
   value: 'Нет аккаунта?',
-  target: '_self',
 });
 
 const layout = new LayoutAuth({
