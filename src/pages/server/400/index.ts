@@ -8,7 +8,6 @@ const link = new Link({
   href: '/messenger',
   class: 'link server-error__item',
   value: 'Назад к чатам',
-  target: '_self',
 });
 
 const layout = new LayoutServerError({

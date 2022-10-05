@@ -4,7 +4,7 @@
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: $font-size*2;
+  font-size: $font-size*2.2;
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -18,17 +18,12 @@
   font-feature-settings: 'liga';
   color: $color-light;
   text-align: center;
+  transition: all 1.5ms;
+  text-shadow: $text-shadow;
 
   &:hover {
-    color: $color-gray-very-light;
     cursor: pointer;
-  }
-}
-.material-icons_dark {
-  color: $color-gray-light;
-
-  &:hover {
-    color: $color-gray;
+    transform: scale(1.2);
   }
 }
 .material-icons_violet {
@@ -37,12 +32,6 @@
   &:hover {
     color: $color-minor-light;
   }
-}
-.material-icons.md-18 {
-  font-size: 18px;
-}
-.material-icons.md-24 {
-  font-size: 24px;
 }
 .material-icons.md-36 {
   font-size: 36px;

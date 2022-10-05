@@ -1,6 +1,7 @@
 import Avatar from '../avatar';
 import Block from '../../services/block';
 import Link from '../link';
+import env from '../../utils/env';
 import { FormChangeAvatar } from '../../forms/changeAvatar';
 import { IAvatar } from '../avatar';
 import { Modal } from '../modal';
@@ -43,14 +44,12 @@ export default class UserCard extends Block<IUserCard> {
       href: '/settings/change/password',
       class: 'link',
       value: 'Изменить пароль',
-      target: '_self',
     });
     const linkChangeProfile = new Link({
       id: 'link',
       href: '/settings/change/info',
       class: 'link',
       value: 'Изменить данные',
-      target: '_self',
     });
     const newProps = {
       class: 'user-card',
@@ -68,7 +67,7 @@ export default class UserCard extends Block<IUserCard> {
       });
       if (state?.userInfo?.avatar) {
         this.children.avatar.setProps({
-          src: `https://ya-praktikum.tech/api/v2/resources/${state?.userInfo?.avatar}`,
+          src: `${env.SWAGGER_RESOURCES}/${state?.userInfo?.avatar}`,
         });
       }
     });

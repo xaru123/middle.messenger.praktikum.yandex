@@ -13,6 +13,9 @@ html, body {
   background: $color-body;
   color: $color-dark;
 }
+.content-form{
+  width: 100%;
+}
 .content {
   height: 100%;
   justify-content: flex-start;
@@ -25,7 +28,7 @@ html, body {
 }
 .logic-block {
   display: flex;
-  box-shadow: $shadow;
+  box-shadow: $shadowCertant;
   border-radius: $radius-big;
   background: $color-light;
   padding: $padding-top * 2 $padding-left*3 $padding-bottom*3;

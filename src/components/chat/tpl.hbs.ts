@@ -2,13 +2,13 @@ export const tpl = `
   <div class="chat-block__content">
     <div class="chat-block__content-item chat-block__header">
       <div class="chat-block__header-avatar">{{{userAvatar}}}</div>
-      <div class="chat-block__header-name">{{ ChatName }}</div>
+      <div class="chat-block__header-name">{{chatName}}</div>
       {{{iconD}}}
       <div class="dropdown-content logic-block">
         <ul class="ul">
-          <li id="li-add-user">Добавить пользователя</li>
-          <li id="li-del-user">Удалить пользователя</li>
-          <li id="li-del-chat">Удалить чат</li>
+          <li class="li" id="li-add-user">Добавить пользователя</li>
+          <li class="li" id="li-del-user">Удалить пользователя</li>
+          <li class="li" id="li-del-chat">Удалить чат</li>
         </ul>
       </div>
     </div>

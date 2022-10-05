@@ -55,11 +55,13 @@ export class AuthController {
       .checkUser()
       .then((responce) => {
         store.setState({ userInfo: responce });
+        return responce;
       })
       .catch((error) => {
-        handlerError(error);
+        if (document.location.pathname != '/' && document.location.pathname != '/sign-up') {
+          handlerError(error);
+        }
         store.setState({ userInfo: {} });
-        router.go('/');
       })
       .finally(() => loader.hide());
   }

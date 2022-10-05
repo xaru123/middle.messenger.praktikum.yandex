@@ -72,18 +72,14 @@ export default class FormChangeProfile extends Block<{}> {
       class: 'input-group',
     });
 
-    const formContent = new Form({
+    const formContent = new Form<IApiUser>({
       id: 'form-change-profile',
       class: 'form flex__item',
       listBlockInputs: [inputMail, inputLogin, inputName, inputName2, inputNick, inputPhone],
       listBlockBtn: [btnBack, btnSubmit],
-      submitCallback: (formData: FormDataFormatterInterface): Promise<string> => {
-        return new Promise((resolve) => {
-          const userC = new UserController();
-          userC.changeProfile(formData as unknown as IApiUser).then(() => {
-            resolve('OK');
-          });
-        });
+      submitCallback: (formData: FormDataFormatterInterface<IApiUser>) => {
+        const userC = new UserController();
+        userC.changeProfile(formData);
       },
     });
     const newProps = {
@@ -103,7 +99,7 @@ export default class FormChangeProfile extends Block<{}> {
   }
 
   setFormValues(data: IApiUser) {
-    const formC = this.children.formContent as Form;
+    const formC = this.children.formContent as Form<IApiUser>;
     const formCListInput = formC.props.listBlockInputs as unknown as Input[];
     formCListInput.forEach((item) => {
       item._input!.value = data[item._inputId] ?? 0;

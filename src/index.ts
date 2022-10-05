@@ -14,12 +14,12 @@ import './style/styles.scss';
 
 router
   .addFunctionForAuthCheck(new AuthController().checkUser)
-  .use('/', new SignIn(), 'div', {}, false)
-  .use('/sign-up', new SignUp(), 'div', {}, false)
-  .use('/messenger', new Chats(), 'div', {}, true)
-  .use('/settings', new Profile(), 'div', {}, true)
-  .use('/settings/change/info', new ChangeProfile(), 'div', {}, true)
-  .use('/settings/change/password', new ChangePassword(), 'div', {}, true)
-  .use('/404', new Error400(), 'div', {}, false)
-  .use('/500', new Error500(), 'div', {}, false)
+  .use('/', new SignIn(), { needAuth: false })
+  .use('/sign-up', new SignUp(), { needAuth: false })
+  .use('/messenger', new Chats(), { needAuth: true })
+  .use('/settings', new Profile(), { needAuth: true })
+  .use('/settings/change/info', new ChangeProfile(), { needAuth: true })
+  .use('/settings/change/password', new ChangePassword(), { needAuth: true })
+  .use('/404', new Error400(), { needAuth: false })
+  .use('/500', new Error500(), { needAuth: false })
   .start();

@@ -3,29 +3,19 @@ import { renderDOM } from '../../utils/renderDOM';
 
 export default class Route {
   public component: Block<{}>;
-  public block: Block<{}> | null;
   public path: string;
-  public tag: string;
   public needCheckAuth: boolean;
-  props;
+  public props: Record<string, any>;
 
-  constructor(path, component, tag = 'div', props = {}, needCheckAuth) {
+  constructor(path, component, props: Record<string, any>) {
     this.path = path;
     this.component = component;
-    this.block = null;
     this.props = props;
-    this.tag = tag;
-    this.needCheckAuth = needCheckAuth;
   }
 
   render(): void {
-    if (!this.block) {
-      this.block = this.component;
-      renderDOM(this.props.rootQuery, this.block);
-      return;
-    }
-
-    this.block.show();
+    renderDOM(this.props.rootQuery, this.component);
+    this.component.show();
   }
 
   navigate(path): void {
@@ -35,8 +25,8 @@ export default class Route {
   }
 
   leave(): void {
-    if (this.block) {
-      this.block.hide();
+    if (this.component) {
+      this.component.hide();
     }
   }
 

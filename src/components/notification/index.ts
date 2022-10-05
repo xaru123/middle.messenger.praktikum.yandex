@@ -2,15 +2,15 @@ import Block from '../../services/block';
 import { tpl } from './tpl.hbs';
 import './style.scss';
 
-enum TYPE {
+enum TYPEN {
   'success' = 'Отлично :)',
   'danger' = 'Ошибочка вышла :(',
   'warning' = 'Что-то не так :(',
-  'info' = 'O! ',
+  'info' = 'Информация! ',
 }
 
 interface TNotification {
-  notificationType: TYPE;
+  notificationType: TYPEN;
   title: string;
   text: string;
   class: string;
@@ -18,24 +18,22 @@ interface TNotification {
 }
 
 export class Notification extends Block<TNotification> {
-  private _btnClose: HTMLElement;
-
   constructor(type: string, text: string, timeout = 5000) {
+    const titleNotification = TYPEN[type] as string;
     const newProps = {
       notificationType: type,
-      title: TYPE[type],
+      title: titleNotification,
       text: text,
       class: 'notification',
       timeout: timeout,
     } as TNotification;
     super('div', newProps);
 
-    this._btnClose = this.getContent()?.querySelector('.btn-close') as HTMLElement;
     this.show();
   }
 
   addEvents() {
-    this._btnClose?.addEventListener('click', this.hide.bind(this));
+    this._element?.querySelector('.btn-close')?.addEventListener('click', () => this.hide());
 
     setTimeout(() => {
       this.hide();
@@ -43,7 +41,7 @@ export class Notification extends Block<TNotification> {
   }
 
   show() {
-    document.body.append(this.getContent()!);
+    document.getElementById('notification-stack')?.append(this.getContent()!);
   }
 
   hide() {

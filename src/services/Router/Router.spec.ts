@@ -11,11 +11,11 @@ describe('Testing class Router', () => {
 
   class ThirdPage extends Block<{}> {}
 
-  TestRouter.use('/', new FirstPage('div', {}), 'div', {}, false)
-    .use('/second', new SecondPage('div', {}), 'div', {}, false)
-    .use('/third', new SecondPage('div', {}), 'div', {}, false)
-    .use('/messenger', new ThirdPage('div', {}), 'div', {}, false)
-    .use('/404', new ThirdPage('div', {}), 'div', {}, false)
+  TestRouter.use('/', new FirstPage('div', {}), { needAuth: false })
+    .use('/second', new SecondPage('div', {}), { needAuth: false })
+    .use('/third', new SecondPage('div', {}), { needAuth: false })
+    .use('/messenger', new ThirdPage('div', {}), { needAuth: false })
+    .use('/404', new ThirdPage('div', {}), { needAuth: false })
     .start();
 
   it('Can go', () => {

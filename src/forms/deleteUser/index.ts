@@ -26,31 +26,25 @@ export class FormDeleteUser extends Block<{}> {
       value: 'Удалить',
     });
 
-    const formContent2 = new Form({
+    const formContent2 = new Form<IApiChatWithUser>({
       id: 'form-delete-user',
       action: '/',
       method: 'post',
       class: 'form flex__item',
       listBlockInputs: [search],
       listBlockBtn: [btnSubmit],
-      submitCallback: (formData: FormDataFormatterInterface, contextForm: Block<{}>, e: Event): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          const listInputChecked = contextForm?._element?.querySelectorAll(':checked') as NodeListOf<HTMLInputElement>;
-          if (listInputChecked && !listInputChecked.length) {
-            new Notification('danger', 'Не выбраны пользователи');
-            e.preventDefault();
-            e.stopPropagation();
-            return reject(new Error());
-          }
-          chatC
-            .deleteUsersFromChat({
-              users: formData.users as string[],
-              chatId: +localStorage?.getItem('lastOpenedChat')!,
-            } as IApiChatWithUser)
-            .finally(() => {
-              resolve('OK');
-            });
-        });
+      submitCallback: (formData: FormDataFormatterInterface<IApiChatWithUser>, contextForm: Block<{}>, e: Event) => {
+        const listInputChecked = contextForm?._element?.querySelectorAll(':checked') as NodeListOf<HTMLInputElement>;
+        if (listInputChecked && !listInputChecked.length) {
+          new Notification('danger', 'Не выбраны пользователи');
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        chatC.deleteUsersFromChat({
+          users: formData.users as string[],
+          chatId: +localStorage?.getItem('lastOpenedChat')!,
+        } as IApiChatWithUser);
       },
     });
 

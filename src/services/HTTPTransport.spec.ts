@@ -8,7 +8,7 @@ describe('Testing class HTTPTransport', () => {
     TestXHR.get(url, props)
       .then(({ response }) => {
         const json = JSON.parse(response);
-        console.log(json)
+        console.log(json);
         if (json.length === 4) {
           done();
         } else {

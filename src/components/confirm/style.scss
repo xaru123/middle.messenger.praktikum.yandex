@@ -1,0 +1,17 @@
+@import '../../style/globalVariableStyle.scss';
+@import '../../style/mixin.scss';
+.confirm {
+  @include flex-constructor(column, center, center);
+  margin: 0;
+  padding: 0;
+
+  p.question {
+    font-size: $font-size*1.5;
+    text-align: center;
+  }
+
+  .icon {
+    font-size: 200px;
+    color: $color-danger;
+  }
+}

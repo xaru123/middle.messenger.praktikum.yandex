@@ -5,7 +5,7 @@
   inset: 0;
   align-items: center;
   justify-content: center;
-  background-color: #e5e5e533;
+  background-color: $color-loader;
   display: none;
 }
 $offset: 187;
@@ -26,28 +26,15 @@ i.material-icons.spinner {
 }
 @keyframes colors {
   0% {
-    color: #e77f9e;
+    color: $color-main-dark;
   }
   50% {
     color: $color-main;
   }
   75% {
-    color: #e77f9e;
+    color: $color-main-dark;
   }
   100% {
     color: $color-main;
   }
-
-  //0% {
-  //  color: $color-minor;
-  //}
-  //50% {
-  //  color: $color-danger;
-  //}
-  //75% {
-  //  color: $color-minor;
-  //}
-  //100% {
-  //  color: $color-danger;
-  //}
 }

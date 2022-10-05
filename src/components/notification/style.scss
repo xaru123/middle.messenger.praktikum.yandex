@@ -1,15 +1,20 @@
 @import '../../style/globalVariableStyle.scss';
 @import '../../style/mixin.scss';
 
-.notification {
+#notification-stack {
   position: fixed;
+  height: 100%;
+  z-index: 333333333;
+  top: 0;
+  right: 0;
+}
+.notification {
   top: 0.5rem;
   right: 1rem;
   @include flex-constructor(column, flex-start, null);
   color: $color-dark;
   overflow-x: hidden;
-  padding: 5px;
-  min-width: 300px;
+  padding: 0 5px;
   z-index: 55555;
 }
 .notification__message {
@@ -34,7 +39,7 @@
   font-style: italic;
 }
 .notification__message .btn-close {
-  color: #74aee2;
+  color: $color-minor-light;
   font-size: 20px;
   position: absolute;
   top: 10px;

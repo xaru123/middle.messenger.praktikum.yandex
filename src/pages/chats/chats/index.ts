@@ -46,11 +46,13 @@ export default class Chats extends Block<{}> {
       content.children.dialogList.setProps({
         listBlockDialogItem: data,
       });
+
+      this.setHeaderChat(state.chats);
     });
 
-    this.timer = setInterval(() => {
-      chatC.getChats({}, false);
-    }, 1000 * 30);
+     this.timer = setInterval(() => {
+       chatC.getChats({}, false);
+     }, 1000 * 30);
   }
 
   setHeaderChat(chats) {
@@ -64,22 +66,14 @@ export default class Chats extends Block<{}> {
         return chat;
       }
     });
+
     if (currentChat.length) {
-      this.setProps({ ChatName: currentChat[0].title });
+      this.children.layout.children.layoutContent.children.chat.setProps({ chatName: currentChat[0].title });
     }
   }
 
   setChatsInfoToBlock(chats) {
-    const list: Block<{}>[] = [];
-    if (!chats.length) {
-      return [];
-    }
-
-    chats.forEach((chatInformation) => {
-      const dialogItemCur = this.createNewDialogItem(chatInformation);
-      list.push(dialogItemCur);
-    });
-    return list;
+    return chats.map((chatInformation) => this.createNewDialogItem(chatInformation));
   }
 
   addAvatarToDialogItem(chatInformation) {

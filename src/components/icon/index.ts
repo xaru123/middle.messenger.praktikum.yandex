@@ -3,10 +3,10 @@ import { tpl } from './tpl.hbs';
 import './style.scss';
 
 export type TIcon = {
-  id?: string;
   value: string;
+  id?: string;
   class?: string;
-  onClick?: () => void;
+  onClick?: (e?: Event) => void;
 };
 
 export default class Icon extends Block<TIcon> {
@@ -14,7 +14,7 @@ export default class Icon extends Block<TIcon> {
     const newProps = {
       class: `${props.class ? props.class : ''} material-icons icon`,
       ...props,
-    } as TIcon;
+    };
     super('i', newProps);
   }
 

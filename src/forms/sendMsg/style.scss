@@ -20,7 +20,7 @@
     align-self: center;
   }
 
-  .icon.attach_file {
+  .icon.smile {
     padding-left: 5px;
     padding-right: 15px;
   }
@@ -33,4 +33,26 @@
   .input-group {
     margin: 0;
   }
+}
+div.emoji {
+  background: $color-body;
+  position: absolute;
+  @include flex-constructor(row, space-around, baseline);
+  flex-wrap: wrap;
+  bottom: 100px;
+  align-content: flex-start;
+  border: 1px solid $color-gray-very-light;
+  box-shadow: $shadow;
+  display: none;
+
+  .emoji-item {
+    padding: 5%;
+
+    &:hover {
+      background: $color-selected;
+    }
+  }
+}
+div.emoji.show {
+  display: flex;
 }

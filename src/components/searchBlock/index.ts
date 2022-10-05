@@ -21,7 +21,7 @@ export default class SearchBlock extends Block<ISearchBlock> {
     const user = new UserController();
     const icon = new Icon({
       value: 'search',
-      class: 'material-icons md-36 icon search__icon',
+      class: 'material-icons icon search__icon',
     });
     const inpitProps = {
       id: 'search',
@@ -32,10 +32,12 @@ export default class SearchBlock extends Block<ISearchBlock> {
       disabled: props?.inputDisabled ?? null,
       required: props?.required,
       onKeyup: (e: Event) => {
+        e.preventDefault();
         const target = e.target as HTMLTextAreaElement;
         const login = target?.value;
         if (!login) {
           this.setListUsers([]);
+          target.focus();
           return;
         }
         const searchProps = { login: login } as IApiSearch;

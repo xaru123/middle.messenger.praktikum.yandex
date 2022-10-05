@@ -1,3 +1,4 @@
+import env from '../utils/env';
 import { HTTPTransport, HTTPTransportOptions } from '../services/httpTransport';
 import { parseJson } from '../utils/parseJson';
 
@@ -9,24 +10,24 @@ type ApiOptions = {
 };
 
 export class BaseAPI {
-  private _basePath: string = 'https://ya-praktikum.tech/api/v2';
   private _api: HTTPTransport;
   private _headers: Record<string, string>;
 
   constructor(path: string = `/`) {
-    this._api = new HTTPTransport(`${this._basePath}${path}`);
+    this._api = new HTTPTransport(`${env.SWAGGER_API}${path}`);
     this._headers = { 'Content-type': 'application/json; charset="UTF-8"' };
   }
 
-  private prepareOptionsForSend(optionsForApi?: ApiOptions): HTTPTransportOptions {
-    const optionsForSend = optionsForApi || ({} as ApiOptions);
-    optionsForSend.headers = optionsForApi?.headers || this._headers;
+  private prepareOptionsForSend(optionsForApi: ApiOptions = {}) {
+    const optionsForSend = {
+      ...optionsForApi,
+      headers: optionsForApi.headers || this._headers,
+    };
     return optionsForSend as HTTPTransportOptions;
   }
 
   public prepareResponse(responseFromApi) {
-    const respAfterParser = parseJson(responseFromApi);
-    return respAfterParser;
+    return parseJson(responseFromApi);
   }
 
   public post(url, options?: ApiOptions) {

@@ -1,1 +1,1 @@
-export const tpl = `{{{formContent1}}}`;
+export const tpl = `{{{formContent}}}`;

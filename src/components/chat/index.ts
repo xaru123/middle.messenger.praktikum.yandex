@@ -1,5 +1,6 @@
 import Avatar, { IAvatar } from '../avatar';
 import Block from '../../services/block';
+import Confirm from '../confirm';
 import Icon, { TIcon } from '../icon';
 import MessagesController, { IMessageGet } from '../../controllers/messages';
 import SendMsg from '../../forms/sendMsg';
@@ -16,16 +17,18 @@ const chatC = new ChatsController();
 
 export interface IChat {
   class?: string;
-  ChatName?: string;
+  chatName?: string;
   userAvatar?: Block<IAvatar>;
   iconD?: Block<TIcon>;
   sendMsg?: Block<{}>;
   listMessages?: [];
 }
+
 const userAvatar = new Avatar({});
 
 export default class Chat extends Block<IChat> {
   handleDebounceScroll: Function;
+  elementChat: HTMLElement;
 
   constructor(props?: IChat) {
     const iconD = new Icon({
@@ -43,84 +46,115 @@ export default class Chat extends Block<IChat> {
       class: `chat-block logic-block`,
       userAvatar,
       iconD,
-      ChatName: '',
+      chatName: '',
       sendMsg,
       listMessages: [],
     } as IChat;
     super('div', newProps);
-    this.handleDebounceScroll = debounce(this.handlerScroll.bind(this), 500);
+    this.handleDebounceScroll = debounce((e: Event) => this.handlerScroll(e), 500);
   }
 
   componentDidMount() {
-    store.subscribe(() => {
-      if (localStorage.getItem('lastOpenedChat')) {
-        this.scrollToLastMsg();
-        this.children.sendMsg?._element?.querySelector('input')?.focus();
+    store.subscribe((state) => {
+      if (!state.listMessages.length) {
+        return [];
       }
+      const lastMsg = state.listMessages[state.listMessages.length - 1];
+      if (!('chat_id' in lastMsg)) {
+        this.scrollToMsg(this.elementChat.scrollHeight);
+      } else {
+        this.scrollToMsg(this.elementChat.scrollHeight / 4);
+      }
+      this.children.sendMsg?._element?.querySelector('input')?.focus();
     });
   }
 
   addEvents() {
-    const chatDiv = this._element?.querySelector('.chat-block__main');
-    chatDiv?.addEventListener('scroll', (e) => this.handleDebounceScroll(e));
+    this.elementChat = this._element?.querySelector('.chat-block__main') as HTMLElement;
+    this.elementChat?.addEventListener('scroll', (e) => this.handleDebounceScroll(e));
+    this._element?.querySelector('#li-add-user')?.addEventListener('click', this.hadlerModalAddUser);
+    this._element?.querySelector('#li-del-user')?.addEventListener('click', this.hadlerModalDelUser);
+    this._element?.querySelector('#li-del-chat')?.addEventListener('click', this.hadlerModalDelChat);
 
-    this._element?.querySelector('#li-add-user')!.addEventListener('click', (e) => {
-      const newForm = new FormAddUser();
-      new Modal({
-        listBlockContent: [newForm],
-        headerTitle: 'Добавить пользователя',
-      });
-      e.stopPropagation();
+    super.addEvents();
+  }
+
+  hadlerModalAddUser(e: Event) {
+    e.preventDefault();
+    const newForm = new FormAddUser();
+    new Modal({
+      listBlockContent: [newForm],
+      headerTitle: 'Добавить пользователя',
     });
-    this._element?.querySelector('#li-del-user')!.addEventListener('click', (e) => {
-      const newForm = new FormDeleteUser();
-      new Modal({
-        listBlockContent: [newForm],
-        headerTitle: 'Удалить пользователя',
-      });
-      e.stopPropagation();
+    document.querySelector('.dropdown-content')!.classList.remove('clicked');
+  }
+
+  hadlerModalDelUser(e: Event) {
+    e.preventDefault();
+    const newForm = new FormDeleteUser();
+    new Modal({
+      listBlockContent: [newForm],
+      headerTitle: 'Удалить пользователя',
     });
-    this._element?.querySelector('#li-del-chat')!.addEventListener('click', (e) => {
-      const accept = confirm('Ты уверен, что хочешь удалить этот чат?');
-      if (accept) {
+    document.querySelector('.dropdown-content')!.classList.remove('clicked');
+  }
+
+  hadlerModalDelChat(e: Event) {
+    const newM = new Modal({
+      listBlockContent: [],
+      headerTitle: 'Требуется подтверждение',
+    });
+
+    const newForm = new Confirm({
+      question: 'Ты уверен, что хочешь удалить этот чат ?',
+      acceptFunction: () => {
         const chatId = localStorage.getItem('lastOpenedChat') as string;
         const chatIdFormatted = +chatId as number;
         chatC.deleteChat({ chatId: chatIdFormatted });
         localStorage.removeItem('lastOpenedChat');
         store.setState({ listMessages: [] });
-      }
-      e.stopPropagation();
+
+        newM.hide();
+      },
     });
+    newM.setProps({ listBlockContent: [newForm] });
+    newM.show();
+    document.querySelector('.dropdown-content')!.classList.remove('clicked');
+    e.stopPropagation();
+  }
+
+  removeEvents() {
+    this._element
+      ?.querySelector('.chat-block__main')
+      ?.removeEventListener('scroll', (e) => this.handleDebounceScroll(e));
+    this._element?.querySelector('#li-add-user')?.removeEventListener('click', this.hadlerModalAddUser);
+    this._element?.querySelector('#li-del-user')?.removeEventListener('click', this.hadlerModalDelUser);
+    this._element?.querySelector('#li-del-chat')?.removeEventListener('click', this.hadlerModalDelChat);
+    super.removeEvents();
   }
 
   handlerScroll(e: Event) {
     e.preventDefault();
     const list = e.target as HTMLUListElement;
     if (list) {
-      const height = list.scrollHeight;
-      const screenHeight = list.offsetHeight;
-      const scrolled = list.scrollTop;
-      const threshold = height - screenHeight / 4;
-      const position = scrolled + screenHeight;
       if ('listMessages' in this.props) {
-        if (position >= threshold && this.props?.listMessages?.length) {
-          this.scrollUp(this.props.listMessages.length);
+        if (list.scrollTop == 0 && this.props?.listMessages?.length) {
+          this.loadOldMsg(this.props.listMessages.length);
         }
       }
     }
   }
 
-  scrollUp(length: number) {
+  loadOldMsg(length: number) {
     if (length && length % 20 === 0) {
       const props = { offset: length } as IMessageGet;
       MessagesController.getMessages(props);
     }
   }
 
-  scrollToLastMsg() {
-    const list = this._element?.querySelector('.chat-block__main') as HTMLElement;
-    list.scrollTo({
-      top: list.scrollHeight,
+  scrollToMsg(position: number) {
+    this.elementChat?.scrollTo({
+      top: position,
     });
   }
 

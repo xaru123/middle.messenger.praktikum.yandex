@@ -1,26 +1,29 @@
 @import '../../style/globalVariableStyle.scss';
 @import '../../style/mixin.scss';
-
 .menu {
   background: $color-main;
   height: calc(100vh - 40px);
-  border-radius: 25px;
+  border-radius: $radius-big;
   margin: $margin-top 10px $margin-right $margin-bottom;
   box-sizing: border-box;
   padding: 15px 15px;
   @include flex-constructor(column, space-between, center);
+  box-shadow: $shadowCertant;
 }
 .menu__item {
-  flex: 1;
+  flex: 1.2;
   display: inline-grid;
   margin: auto auto;
+  background: transparent;
+  border: 0;
+
+  &:hover {
+    cursor: auto;
+  }
 }
 .menu__item_center {
   align-items: center;
   flex-grow: 20;
-}
-.menu__item:hover {
-  cursor: auto;
 }
 @media (max-device-width: 768px) {
   .menu {

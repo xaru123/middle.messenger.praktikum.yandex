@@ -10,7 +10,6 @@ const link = new Link({
   href: '/',
   class: 'link',
   value: 'Войти?',
-  target: '_self',
 });
 const layout = new LayoutAuth({
   headerTitle: 'Регистрация',

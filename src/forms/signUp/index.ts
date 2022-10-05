@@ -12,7 +12,6 @@ export default class FormSignIn extends Block<{}> {
     const btnSubmit = new Button({
       type: 'submit',
       class: 'button form__button',
-      disabled: 'disabled',
       value: 'Зарегистрироваться',
     });
     const inputMail = new Input({
@@ -57,28 +56,23 @@ export default class FormSignIn extends Block<{}> {
       label: 'Пароль (еще раз)',
       class: 'input-group',
     });
-    const formContent = new Form({
+    const formContent = new Form<IApiSignUp>({
       id: 'form-sign-up',
       action: '/',
       method: 'post',
       class: 'form flex__item',
       listBlockInputs: [inputMail, inputLogin, inputName, inputName2, inputPhone, inputPass, inputPassNew],
       listBlockBtn: [btnSubmit],
-      submitCallback: (formData: FormDataFormatterInterface): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          const data = {
-            email: formData.email,
-            login: formData.login,
-            first_name: formData.first_name,
-            second_name: formData.second_name,
-            phone: formData.phone,
-            password: formData.oldPassword,
-          } as IApiSignUp;
-          new AuthController()
-            .signUp(data)
-            .then(() => resolve('ok'))
-            .catch((error) => reject(error));
-        });
+      submitCallback: (formData: FormDataFormatterInterface<IApiSignUp>) => {
+        const data = {
+          email: formData.email,
+          login: formData.login,
+          first_name: formData.first_name,
+          second_name: formData.second_name,
+          phone: formData.phone,
+          password: formData.password,
+        };
+        new AuthController().signUp(data);
       },
     });
 

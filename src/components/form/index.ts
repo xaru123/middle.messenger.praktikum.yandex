@@ -10,16 +10,16 @@ export interface IForm {
   listBlockBtn?: Block<IButton>[];
   action?: string;
   method?: string;
-  submitCallback: (formData: FormDataFormatterInterface, contextForm?: Block<{}>, e?: Event) => Promise<string>;
+  submitCallback: (formData: FormDataFormatterInterface<unknown>, contextForm?: Block<{}>, e?: Event) => void;
   onChange?: (e?: Event) => void;
   onSubmit?: (e?: Event) => void;
 }
 
-type TTypicalForValue = string | number | string[];
+export type FormDataFormatterInterface<T> = {
+  [key in keyof T]: T[key];
+};
 
-export interface FormDataFormatterInterface {
-  [index: string]: TTypicalForValue;
-}
+type TTypicalForValue = string | number | string[];
 
 type TFormValue = {
   value: TTypicalForValue;
@@ -35,7 +35,7 @@ interface FilterValueInterface {
   1: TFormValue;
 }
 
-export class Form extends Block<IForm> {
+export class Form<IFormData> extends Block<IForm> {
   _formData: FormDataInterface;
 
   constructor(props: IForm) {
@@ -47,27 +47,17 @@ export class Form extends Block<IForm> {
       },
       onSubmit: (e: Event) => {
         e.preventDefault();
-        const elementForm = e.target;
         if (!this.props.submitCallback) {
           return false;
         }
         if (this.checkForm()) {
-          this.props
-            .submitCallback(this.formDataFormatter(), this, e)
-            .then((status) => {
-              if (status == 'OK') {
-                this.resetForm(elementForm);
-                e.preventDefault();
-                return false;
-              }
-            })
-            .catch(() => {});
+          this.props.submitCallback(this.formDataFormatter(), this, e);
+          this.resetForm(e.target)
         }
         return false;
       },
     });
 
-    this.disabledBtnByForm(false);
     this.initFormData();
   }
 
@@ -76,8 +66,8 @@ export class Form extends Block<IForm> {
     this.disabledBtnByForm(false);
   }
 
-  formDataFormatter(): FormDataFormatterInterface {
-    const formatted = {} as FormDataFormatterInterface;
+  formDataFormatter(): FormDataFormatterInterface<IFormData> {
+    const formatted = {} as FormDataFormatterInterface<IFormData>;
     for (const dataItem in this._formData) {
       switch (dataItem) {
         case 'checkbox':
@@ -160,10 +150,10 @@ export class Form extends Block<IForm> {
       if (!item[1].valid) {
         notValidCount++;
       }
-      if (item[0] == 'oldPassword' || item[0] == 'newPassword') {
+      if (Object.values(this._formData).length > 2 && (item[0] == 'password' || item[0] == 'newPassword')) {
         if (
-          this._formData['oldPassword'].value != this._formData['newPassword'].value &&
-          this._formData['oldPassword'].valid &&
+          this._formData['password'].value != this._formData['newPassword'].value &&
+          this._formData['password'].valid &&
           this._formData['newPassword'].valid
         ) {
           notValidCount++;

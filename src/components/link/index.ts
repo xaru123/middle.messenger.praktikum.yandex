@@ -9,7 +9,7 @@ export interface Ilink {
   title?: string;
   class: string;
   value: string | Block<{}>;
-  target: string;
+  target?: string;
   onClick?: (e) => void;
 }
 

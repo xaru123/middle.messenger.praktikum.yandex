@@ -9,7 +9,6 @@ export interface TInput {
   class?: string;
   placeholder?: string;
   label?: string;
-  autofocus?: string;
   required?: string | null;
   disabled?: string | null;
   title?: string;
@@ -40,9 +39,9 @@ export default class Input extends Block<TInput> {
       onInput: (e) => this.handlerOnBlurInput(e),
     } as TInput;
     super('div', newProps);
+
     this._input = this.getContent()?.querySelector('input')!;
     this._inputId = this._input.id;
-
     this._helper = this.getContent()?.querySelector('.input-group__helper') as HTMLElement;
   }
 
