@@ -25,7 +25,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSHKEY }}
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "dist/"
-          REMOTE_HOST: 158.160.23.163
-          REMOTE_USER: admin
+          REMOTE_HOST: "158.160.23.163"
+          REMOTE_USER: "admin"
           TARGET: "/home/admin/"
           EXCLUDE: "/dist/, /node_modules/"
