@@ -141,7 +141,7 @@ export class Form<IFormData> extends Block<IForm> {
 
   checkForm() {
     let notValidCount = 0;
-    let textError = '';
+   // let textError = '';
     const errorTextContent = this._element?.querySelector('.form-problem') as Node;
     errorTextContent.textContent = '';
 
@@ -150,7 +150,7 @@ export class Form<IFormData> extends Block<IForm> {
       if (!item[1].valid) {
         notValidCount++;
       }
-      if (Object.values(this._formData).length > 2 && (item[0] == 'password' || item[0] == 'newPassword')) {
+      /*if (Object.values(this._formData).length > 2 && (item[0] == 'password' || item[0] == 'newPassword')) {
         if (
           this._formData['password'].value != this._formData['newPassword'].value &&
           this._formData['password'].valid &&
@@ -160,7 +160,7 @@ export class Form<IFormData> extends Block<IForm> {
           textError = 'Разные пароли';
           errorTextContent.textContent = textError;
         }
-      }
+      }*/
     });
     return notValidCount == 0;
   }
