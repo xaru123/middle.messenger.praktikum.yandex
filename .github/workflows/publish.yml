@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   publish:
-    name: Build
+    name: Publish
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +22,7 @@ jobs:
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSHKEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY_SSH }}
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "dist/"
           REMOTE_HOST: "158.160.23.163"
