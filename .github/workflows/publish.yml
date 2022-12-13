@@ -13,9 +13,9 @@ jobs:
           key: ${{ secrets.DEPLOY_SERVER_KEY }}
           known_hosts: unnecessary
 
-#      -name: Adding know host
-#        run: ssh-keyscan -p ${{ secrets.DEPLOY_SERVER_KEY }} -H ${{ secrets.DEPLOY_SERVER_HOST }} >> ~/.ssh/known_host
-#
+      -name: Adding know host
+        run: ssh-keyscan -p ${{ secrets.DEPLOY_SERVER_KEY }} -H ${{ secrets.DEPLOY_SERVER_HOST }} >> ~/.ssh/known_host
+
 #      -name: Run Docker
 #        uses: appleboy/ssh-action@master
 #        with:
