@@ -7,12 +7,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2.2.0
-#      - name: Install SSH key
-#        uses: shimataro/ssh-key-action@v2
-#        with:
-#          key: ${{ secret.DEPLY_SERVER_KEY }}
-#          known_hosts: unnecessary
-#
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secret.DEPLY_SERVER_KEY }}
+          known_hosts: unnecessary
+
 #      -name: Adding know host
 #        run: ssh-keyscan -p ${{ secret.DEPLY_SERVER_KEY }} -H ${{ secret.DEPLY_SERVER_HOST }} >> ~/.ssh/known_host
 #
