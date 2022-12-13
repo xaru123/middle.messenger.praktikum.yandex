@@ -27,7 +27,7 @@ jobs:
           command_timeout: 35m
           script: |
             echo "START"
-#            cd prod
+            cd prod
 #            pwd
 #            ls -la
 #            sudo docker-compose up -d --build
