@@ -10,11 +10,11 @@ jobs:
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secret.DEPLOY_SERVER_KEY }}
+          key: ${{ secrets.DEPLOY_SERVER_KEY }}
           known_hosts: unnecessary
 
 #      -name: Adding know host
-#        run: ssh-keyscan -p ${{ secret.DEPLOY_SERVER_KEY }} -H ${{ secret.DEPLOY_SERVER_HOST }} >> ~/.ssh/known_host
+#        run: ssh-keyscan -p ${{ secrets.DEPLOY_SERVER_KEY }} -H ${{ secrets.DEPLOY_SERVER_HOST }} >> ~/.ssh/known_host
 #
 #      -name: Run Docker
 #        uses: appleboy/ssh-action@master
