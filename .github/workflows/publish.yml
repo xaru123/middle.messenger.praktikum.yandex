@@ -28,6 +28,6 @@ jobs:
           script: |
             echo "START"
             pwd
-            cd /prod
+            cd prod
 #            ls -la
 #            sudo docker-compose up -d --build
