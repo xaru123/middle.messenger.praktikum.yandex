@@ -7,25 +7,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2.2.0
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secret.DEPLY_SERVER_KEY }}
-          known_hosts: unnecessary
-
-      -name: Adding know host
-        run: ssh-keyscan -p ${{ secret.DEPLY_SERVER_KEY }} -H ${{ secret.DEPLY_SERVER_HOST }} >> ~/.ssh/known_host
-
-      -name: Run Docker
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.DEPLOY_SERVER_HOST }}
-          port: ${{ secrets.DEPLOY_SERVER_PORT }}
-          username: ${{ secrets.DEPLOY_SERVER_USERNAME }}
-          key: ${{ secrets.DEPLOY_SERVER_KEY }}
-          command_timeout: 35m
-          script: |
-            cd prod
-            pwd
-            ls -la
-            sudo docker-compose up -d --build
+#      - name: Install SSH key
+#        uses: shimataro/ssh-key-action@v2
+#        with:
+#          key: ${{ secret.DEPLY_SERVER_KEY }}
+#          known_hosts: unnecessary
+#
+#      -name: Adding know host
+#        run: ssh-keyscan -p ${{ secret.DEPLY_SERVER_KEY }} -H ${{ secret.DEPLY_SERVER_HOST }} >> ~/.ssh/known_host
+#
+#      -name: Run Docker
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+#          port: ${{ secrets.DEPLOY_SERVER_PORT }}
+#          username: ${{ secrets.DEPLOY_SERVER_USERNAME }}
+#          key: ${{ secrets.DEPLOY_SERVER_KEY }}
+#          command_timeout: 35m
+#          script: |
+#            cd prod
+#            pwd
+#            ls -la
+#            sudo docker-compose up -d --build
