@@ -23,6 +23,7 @@ jobs:
           port: ${{ secrets.DEPLOY_SERVER_PORT }}
           username: ${{ secrets.DEPLOY_SERVER_USERNAME }}
           key: ${{ secrets.DEPLOY_SERVER_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           command_timeout: 35m
           script: |
             cd prod
