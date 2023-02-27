@@ -9,6 +9,7 @@ export interface IApiAvatar extends FormData {
 }
 
 export interface IApiPassword extends FormData {
+  password: string;
   oldPassword: string;
   newPassword: string;
 }
