@@ -1,7 +1,7 @@
-import Block from '../../services/block';
-import { IButton } from '../button';
-import { tpl } from './tpl.hbs';
-import './style.scss';
+import Block from "../../services/block";
+import { IButton } from "../button";
+import { tpl } from "./tpl.hbs";
+import "./style.scss";
 
 export interface IForm {
   id?: string;
@@ -10,7 +10,9 @@ export interface IForm {
   listBlockBtn?: Block<IButton>[];
   action?: string;
   method?: string;
-  submitCallback: (formData: FormDataFormatterInterface<unknown>, contextForm?: Block<{}>, e?: Event) => void;
+  submitCallback: (
+    formData: FormDataFormatterInterface<unknown>, contextForm?: Block<{}>,
+    e?: Event) => void;
   onChange?: (e?: Event) => void;
   onSubmit?: (e?: Event) => void;
 }
@@ -39,7 +41,7 @@ export class Form<IFormData> extends Block<IForm> {
   _formData: FormDataInterface;
 
   constructor(props: IForm) {
-    super('form', {
+    super("form", {
       ...props,
       onChange: (e: Event) => {
         const elementInForm = e.target;
@@ -52,10 +54,10 @@ export class Form<IFormData> extends Block<IForm> {
         }
         if (this.checkForm()) {
           this.props.submitCallback(this.formDataFormatter(), this, e);
-          this.resetForm(e.target)
+          this.resetForm(e.target);
         }
         return false;
-      },
+      }
     });
 
     this.initFormData();
@@ -70,11 +72,11 @@ export class Form<IFormData> extends Block<IForm> {
     const formatted = {} as FormDataFormatterInterface<IFormData>;
     for (const dataItem in this._formData) {
       switch (dataItem) {
-        case 'checkbox':
+        case "checkbox":
           const list = this._formData[dataItem].value as unknown as TFormValue[];
           list.forEach((checkboxInfo: TFormValue) => {
             const stringValue = checkboxInfo.value as string;
-            const splitParam = stringValue.split('-') as string[];
+            const splitParam = stringValue.split("-") as string[];
             if (!formatted[splitParam[0]]) {
               formatted[splitParam[0]] = [];
             }
@@ -82,7 +84,7 @@ export class Form<IFormData> extends Block<IForm> {
             currentFormatter.push(splitParam[1]);
           });
           break;
-        case 'file':
+        case "file":
           formatted[dataItem] = this._formData[dataItem].value;
           break;
         default:
@@ -103,22 +105,22 @@ export class Form<IFormData> extends Block<IForm> {
 
   changeValidFormByInput(elementInForm) {
     switch (elementInForm.type) {
-      case 'checkbox':
-        if (!this._formData['checkbox']) {
-          this._formData['checkbox'] = { value: [], valid: true };
+      case "checkbox":
+        if (!this._formData["checkbox"]) {
+          this._formData["checkbox"] = { value: [], valid: true };
         }
         const newR = [
           {
             value: elementInForm.name,
-            valid: elementInForm.checked,
-          },
+            valid: elementInForm.checked
+          }
         ] as TFormValue[];
-        const prevR = this._formData['checkbox'].value as unknown as TFormValue[];
+        const prevR = this._formData["checkbox"].value as unknown as TFormValue[];
 
         if (elementInForm.checked) {
-          this._formData['checkbox'].value = [...prevR, ...newR] as [];
+          this._formData["checkbox"].value = [...prevR, ...newR] as [];
         } else {
-          const list = this._formData['checkbox'].value as unknown as TFormValue[];
+          const list = this._formData["checkbox"].value as unknown as TFormValue[];
           list.map((item, i) => {
             if (item.value == elementInForm.name) {
               list.splice(i, 1);
@@ -127,7 +129,7 @@ export class Form<IFormData> extends Block<IForm> {
           });
         }
         break;
-      case 'file':
+      case "file":
         this._formData[elementInForm.name].valid = true;
         this._formData[elementInForm.name].value = elementInForm.files[0];
         break;
@@ -141,34 +143,37 @@ export class Form<IFormData> extends Block<IForm> {
 
   checkForm() {
     let notValidCount = 0;
-   // let textError = '';
-    const errorTextContent = this._element?.querySelector('.form-problem') as Node;
-    errorTextContent.textContent = '';
+    let textError = "";
+    const errorTextContent = this._element?.querySelector(
+      ".form-problem") as Node;
+    errorTextContent.textContent = "";
 
     Object.entries(this._formData).forEach((itemCur) => {
       const item = itemCur as FilterValueInterface;
       if (!item[1].valid) {
         notValidCount++;
       }
-      /*if (Object.values(this._formData).length > 2 && (item[0] == 'password' || item[0] == 'newPassword')) {
+      if (Object.values(this._formData).length > 2 && this._formData.hasOwnProperty("password") &&
+        this._formData.hasOwnProperty("newPassword")) {
         if (
-          this._formData['password'].value != this._formData['newPassword'].value &&
-          this._formData['password'].valid &&
-          this._formData['newPassword'].valid
+          this._formData["password"].value !=
+          this._formData["newPassword"].value &&
+          this._formData["password"].valid &&
+          this._formData["newPassword"].valid
         ) {
           notValidCount++;
-          textError = 'Разные пароли';
+          textError = "Разные пароли";
           errorTextContent.textContent = textError;
         }
-      }*/
+      }
     });
     return notValidCount == 0;
   }
 
   disabledBtnByForm(signValidForm: boolean) {
     this.props.listBlockBtn?.filter((buttonBlock: Block<IButton>) => {
-      if (buttonBlock.props.type == 'submit') {
-        buttonBlock.setProps({ disabled: !signValidForm ? 'disabled' : null });
+      if (buttonBlock.props.type == "submit") {
+        buttonBlock.setProps({ disabled: !signValidForm ? "disabled" : null });
       }
     });
   }

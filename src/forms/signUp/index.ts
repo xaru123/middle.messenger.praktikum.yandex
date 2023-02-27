@@ -46,7 +46,7 @@ export default class FormSignIn extends Block<{}> {
     });
     const inputPass = new Input({
       type: 'password',
-      id: 'oldPassword',
+      id: 'password',
       label: 'Пароль',
       class: 'input-group',
     });
@@ -64,15 +64,14 @@ export default class FormSignIn extends Block<{}> {
       listBlockInputs: [inputMail, inputLogin, inputName, inputName2, inputPhone, inputPass, inputPassNew],
       listBlockBtn: [btnSubmit],
       submitCallback: (formData: FormDataFormatterInterface<IApiSignUp>) => {
-        const data = {
+        new AuthController().signUp({
           email: formData.email,
           login: formData.login,
           first_name: formData.first_name,
           second_name: formData.second_name,
           phone: formData.phone,
           password: formData.password,
-        };
-        new AuthController().signUp(data);
+        });
       },
     });
 

@@ -1,20 +1,33 @@
-name: Build
-on: [push]
+name: Publish
+on: [ push ]
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2.2.0
-      - name: Read .nvmrc
-        id: node_version
-        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
-      - name: Setup Node
-        uses: actions/setup-node@v1
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
         with:
-          node-version: '10.x'
-      - name: Install dependencies
-        run: npm install
-      - name: Run build
-        run: npm run build --if-present
+          key: ${{ secrets.DEPLOY_SERVER_KEY }}
+          known_hosts: unnecessary
+
+      - name: Adding know host
+        run: ssh-keyscan -p ${{ secrets.DEPLOY_SERVER_PORT }} -H ${{ secrets.DEPLOY_SERVER_HOST }} >> ~/.ssh/known_host
+
+      - name: Run Docker
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          port: ${{ secrets.DEPLOY_SERVER_PORT }}
+          username: ${{ secrets.DEPLOY_SERVER_USERNAME }}
+          key: ${{ secrets.DEPLOY_SERVER_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          command_timeout: 35m
+          script: |
+            echo "START"
+            pwd
+            cd prod
+            ls -la
+            sudo docker-compose up -d --build
